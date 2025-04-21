@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 LOGIN_REDIRECT_URL = '/redireccion/'  # Redirige a la vista de redirección
 
@@ -24,12 +25,14 @@ AUTH_USER_MODEL = 'Eduwave_app.Usuario'
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o_^v-n0cu+@*zu0z=_le#vf_m9!ge9helqnbkcbr_m87g+ml9_'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.onrender.com']
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # Application definition
@@ -81,16 +84,10 @@ WSGI_APPLICATION = 'Eduwave.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'eduwave_bd',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL', 'mysql://admin:L4M3j0rB4s3D3D4t0s@eduwavebd.chg4mqeys7jn.us-east-2.rds.amazonaws.com:3306/eduwave_bd')
+    )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
