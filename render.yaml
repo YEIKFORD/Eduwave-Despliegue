@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: Eduwave
+    env: python
+    buildCommand: >
+      pip install -r requirements.txt &&
+      python manage.py migrate &&
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn eduwave.wsgi
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://eduwave_despliegue_user:iAfjOFyyxOxQLyGCLMa0QAEBIRx2ViGq@dpg-d038942li9vc73eniiig-a/eduwave_despliegue
+      - key: SECRET_KEY
+        value: django-insecure-!$h@3d93d4r0m-r4nd0m-s3cr3t-k3y
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: eduwave.onrender.com

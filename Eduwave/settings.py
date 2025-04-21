@@ -25,7 +25,7 @@ AUTH_USER_MODEL = 'Eduwave_app.Usuario'
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-!$h@3d93d4r0m-r4nd0m-s3cr3t-k3y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True") == "True"
