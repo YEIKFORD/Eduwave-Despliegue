@@ -28,9 +28,8 @@ AUTH_USER_MODEL = 'Eduwave_app.Usuario'
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
-
-ALLOWED_HOSTS = ['.onrender.com']
+DEBUG = os.environ.get("DEBUG", "True") == "True"
+ALLOWED_HOSTS = ["*"]  # mientras depuras
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
