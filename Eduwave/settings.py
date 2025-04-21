@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -140,3 +141,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'eduwavesena@gmail.com' 
 EMAIL_HOST_PASSWORD = 'iktk ajmy lhzf raqg'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
