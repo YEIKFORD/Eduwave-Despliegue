@@ -16,3 +16,11 @@ services:
         value: "False"
       - key: ALLOWED_HOSTS
         value: eduwave.onrender.com
+      - key: STATIC_URL
+        value: "/static/"
+      - key: STATIC_ROOT
+        value: "/staticfiles"
+      - key: MEDIA_URL
+        value: "/media/"
+      - key: MEDIA_ROOT
+        value: "/media"

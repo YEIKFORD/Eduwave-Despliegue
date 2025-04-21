@@ -126,7 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'Eduwave_app', 'public')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'Eduwave_app', 'static')]
 
 MEDIA_URL = '/media/'  # URL para acceder a los archivos subidos
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Ruta dond
