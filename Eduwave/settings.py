@@ -30,8 +30,7 @@ SECRET_KEY = 'django-insecure-!$h@3d93d4r0m-r4nd0m-s3cr3t-k3y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ['eduwave.onrender.com', 'localhost', '127.0.0.1']
-
+ALLOWED_HOSTS = ['eduwave-despliegue-2.onrender.com', 'localhost', '127.0.0.1']
 
 
 
