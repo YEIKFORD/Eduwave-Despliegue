@@ -83,9 +83,12 @@ WSGI_APPLICATION = 'Eduwave.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'mysql://admin:L4M3j0rB4s3D3D4t0s@eduwavebd.chg4mqeys7jn.us-east-2.rds.amazonaws.com:3306/eduwave_bd')
+        default='postgresql://eduwave_despliegue_user:iAfjOFyyxOxQLyGCLMa0QAEBIRx2ViGq@dpg-d038942li9vc73eniiig-a/eduwave_despliegue',
+        conn_max_age=600,
+        ssl_require=True
     )
 }
 
