@@ -6,7 +6,7 @@ services:
       pip install -r requirements.txt &&
       python manage.py migrate &&
       python manage.py collectstatic --noinput
-    startCommand: gunicorn eduwave.wsgi
+    startCommand: gunicorn Eduwave.wsgi:application
     envVars:
       - key: DATABASE_URL
         value: postgresql://eduwave_despliegue_user:iAfjOFyyxOxQLyGCLMa0QAEBIRx2ViGq@dpg-d038942li9vc73eniiig-a/eduwave_despliegue
