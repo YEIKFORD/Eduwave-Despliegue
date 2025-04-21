@@ -31,7 +31,6 @@ SECRET_KEY = 'django-insecure-!$h@3d93d4r0m-r4nd0m-s3cr3t-k3y'
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 ALLOWED_HOSTS = ["*"]  # mientras depuras
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # Application definition
@@ -131,6 +130,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'Eduwave_app', 'public')]
 
 MEDIA_URL = '/media/'  # URL para acceder a los archivos subidos
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Ruta dond
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
