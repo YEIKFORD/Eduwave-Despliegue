@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Lista Redes{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<div class="contenido-tabla">
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Centro de Formacion</th>
+                <th>Actualizar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in red %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.nombre}}</td>
+                <td>{{i.centro_formacion.nombre}}</td>
+                <td><a href="{% url 'red_actualizar' i.id %}" class="tabla__botones"><img alt="Actualizar" src="{% static 'img/editar.png' %}"></a></td>
+                <td><a href="{% url 'red_eliminar' i.id %}" class="tabla__botones" onclick="return(confirm('¿Desea eliminar la red?'))"  ><img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}"></a></td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No hay redes registradas.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'red_insertar' %}" class="agregar">+ Nueva Red </a>
+</div>
+{% endblock %}
+

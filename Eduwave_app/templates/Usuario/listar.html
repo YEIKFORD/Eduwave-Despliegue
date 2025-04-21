@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Lista Usuarios{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+{% block content %}
+<div class="contenido-tabla">
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipo de Documento</th>
+                <th>Número Documento</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Usuario</th>
+                <th>Correo Electrónico</th>
+                <th>Teléfono</th>
+                <th>Rol</th>
+                <th>centro Formación</th>
+
+                <th>Actualizar</th>
+                <th>Eliminar</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in usuarios %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.tipo_doc}}</td>
+                <td>{{i.numero_doc}}</td>
+                <td>{{i.first_name}}</td>
+                <td>{{i.last_name}}</td>
+                <td>{{i.username}}</td>
+                <td>{{i.email}}</td>
+                <td>{{i.telefono}}</td>
+                <td>{{i.rol.nombre}}</td>
+                <td>{{i.centro.nombre}}</td>
+                <td><a href="{% url 'usuario_actualizar' i.id %}" class="tabla__botones"><img alt="Actualizar" src="{% static 'img/editar.png' %}"></a></td>
+                <td><a href="{% url 'usuario_eliminar' i.id %}" class="tabla__botones" onclick="return(confirm('¿Deseas eliminar el usuario?'))"><img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}"></a></td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="10">No hay usuarios registrados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'usuario_insertar' %}" class="agregar">+ Nuevo Usuario </a>
+</div>
+{% endblock %}
+
+

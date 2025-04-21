@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Lista Tipos de Novedades{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<div class="contenido-tabla">
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Actualizar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in tipo_novedad %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.nombre}}</td>
+                <td><a href="{% url 'tipo_novedad_actualizar' i.id %}" class="tabla__botones"><img alt="Actualizar" src="{% static 'img/editar.png' %}"></a></td>
+                <td><a href="{% url 'tipo_novedad_eliminar' i.id %}" class="tabla__botones" onclick="return(confirm('¿Desea eliminar el tipo de novedad?'))"  ><img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}"></a></td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No hay tipos de novedades registrados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'tipo_novedad_insertar' %}" class="agregar">+ Nuevo tipo de novedad </a>
+</div>
+{% endblock %}
+
+

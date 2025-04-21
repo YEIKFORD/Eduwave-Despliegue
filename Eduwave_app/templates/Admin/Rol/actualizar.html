@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Actualizar Rol{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+    <form class="formulario-estructura" action="" method="POST">
+        {% csrf_token %}
+        <h2 class="formulario-estructura__titulo" >Actualizar Rol</h2>
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="nombre">Nombre: </label>
+            <input class="formulario-estructura__campo" type="text" id="nombre" name="nombre" value="{{rol.nombre}}" required>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="codigo">Codigo: </label>
+            <input class="formulario-estructura__campo" type="text" id="codigo" name="codigo" value="{{rol.codigo}}" required>
+        </div>
+        
+        <div class="formulario-estructura__grupo" >
+            <label class="formulario-estructura__etiqueta" for="descripcion">Descripción: </label>
+            <input class="formulario-estructura__campo" type="text" id="descripcion" name="descripcion" value="{{rol.descripcion}}" required>
+        </div>
+        
+        <div class="formulario-estructura__grupo">
+            <button class="formulario-estructura__boton" type="submit" value="Crear" name="Guardar" class="submit-button">Actualizar</button>
+        </div>
+    </form>
+{% endblock %}
+

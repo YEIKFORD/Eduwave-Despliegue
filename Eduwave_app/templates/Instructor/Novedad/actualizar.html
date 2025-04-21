@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Actualizar Novedad{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+    <!-- CDN de Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<h2>Actualizar Novedad</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="novedades-form-container">
+        <h2 class="novedades-titulo">Actualizar Novedad</h2>
+
+        <label for="tipo_novedad" class="novedades-label">Tipo de Novedad:</label>
+        <select name="tipo_novedad" id="tipo_novedad" class="novedades-select" required>
+            {% for tipo in tipo_novedades %}
+                <option value="{{ tipo.id }}" {% if novedad.tipo_novedad.id == tipo.id %}selected{% endif %}>{{ tipo.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="descripcion" class="novedades-label">Descripción:</label>
+        <textarea name="descripcion" id="descripcion" class="novedades-textarea" required>{{ novedad.descripcion }}</textarea>
+
+        <div id="campos_academica_disciplinaria">
+            <label for="usuarios">Usuarios:</label>
+            <select name="usuarios[]" id="usuarios" multiple class="novedades-select2">
+                {% for u in usuarios %}
+                    <option value="{{ u.id }}" {% if u in novedad.usuarios.all %}selected{% endif %}>{{ u.get_full_name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="tipo_falta" class="novedades-label">Tipo de Falta:</label>
+            <select name="tipo_falta" id="tipo_falta" class="novedades-select">
+                <option value="">Seleccione</option>
+                <option value="Leve" {% if novedad.tipo_falta == "Leve" %}selected{% endif %}>Leve</option>
+                <option value="Grave" {% if novedad.tipo_falta == "Grave" %}selected{% endif %}>Grave</option>
+                <option value="Gravisima" {% if novedad.tipo_falta == "Gravisima" %}selected{% endif %}>Gravísima</option>
+            </select>
+        </div>
+
+        <div id="campo_ambiente">
+            <label for="ambiente" class="novedades-label">Ambiente:</label>
+            <select name="ambiente" id="ambiente" class="novedades-select">
+                <option value="">Seleccione</option>
+                {% for ambiente in ambientes %}
+                    <option value="{{ ambiente.id }}" {% if novedad.ambiente.id == ambiente.id %}selected{% endif %}>{{ ambiente.numero_ambiente }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <label for="evidencia" class="novedades-label">Evidencia (opcional):</label>
+        <input type="file" name="evidencia" class="novedades-input">
+
+        <button type="submit" class="boton-novedad">Actualizar</button>
+    </div>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tipoNovedadSelect = document.getElementById("tipo_novedad");
+
+        $('#usuarios').select2({
+            placeholder: 'Selecciona uno o varios usuarios',
+            width: '100%',
+            minimumInputLength: 1,
+            ajax: {
+                url: '{% url "usuario_search" %}', 
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    console.log("Buscando usuarios con el término: ", params.term);
+                    return {
+                        q: params.term,
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data, params) {
+                    console.log("Respuesta de la búsqueda: ", data);
+                    params.page = params.page || 1;
+                    return {
+                        results: data.results,
+                        pagination: {
+                            more: data.pagination.more
+                        }
+                    };
+                },
+                cache: true
+            }
+        });
+
+        function toggleCampos() {
+            const tipo = tipoNovedadSelect.options[tipoNovedadSelect.selectedIndex].text;
+
+            const campoUsuarios = document.getElementById("campos_academica_disciplinaria");
+            const campoAmbiente = document.getElementById("campo_ambiente");
+
+            if (campoUsuarios && campoAmbiente) {
+                if (tipo === 'Académica' || tipo === 'Disciplinaria') {
+                    campoUsuarios.style.display = 'block';
+                    campoAmbiente.style.display = 'none';
+                } else if (tipo === 'Ambiente') {
+                    campoUsuarios.style.display = 'none';
+                    campoAmbiente.style.display = 'block';
+                } else {
+                    campoUsuarios.style.display = 'none';
+                    campoAmbiente.style.display = 'none';
+                }
+            }
+        }
+
+        tipoNovedadSelect.addEventListener("change", toggleCampos);
+        toggleCampos();
+    });
+</script>
+
+{% endblock %}

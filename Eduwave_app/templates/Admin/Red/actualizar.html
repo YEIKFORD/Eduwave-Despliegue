@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Actualizar Red{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+    <form class="formulario-estructura" action="" method="POST">
+        <h2 class="formulario-estructura__titulo">Actualizar Red</h2>
+        {% csrf_token %}
+
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="nombre">Nombre: </label>
+            <input class="formulario-estructura__campo" type="text" id="nombre" name="nombre" value="{{ red.nombre }}" required>
+        </div>
+
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="centro_formacion_id">Centro de Formación: </label><br>
+            <select class="formulario-estructura__campo" name="centro_formacion_id" id="centro_formacion_id" required>
+                <option value="">Seleccione un centro de formación</option>
+                {% for i in centro_formacion %}
+                <option value="{{ i.id }}" {% if red.centro_formacion.id == i.id %} selected {% endif %}>
+                    {{ i.nombre }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="formulario-estructura__grupo">
+            <button class="formulario-estructura__boton submit-button" type="submit" name="Guardar">Actualizar</button>
+        </div>
+    </form>
+{% endblock %}

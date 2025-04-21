@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Lista Roles{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+    <div class="contenido-tabla">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Codigo</th>
+                    <th>Descripción</th>
+                    <th>Actualizar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in roles %}
+                <tr>
+                    <td>{{i.nombre}}</td>
+                    <td>{{i.codigo}}</td>
+                    <td>{{i.descripcion}}</td>
+                    <td><a href="{% url 'rol_actualizar' i.id %}" class="tabla__botones"><img alt="Actualizar" src="{% static 'img/editar.png' %}"></a></td>
+                    <td><a href="{% url 'rol_eliminar' i.id %}" class="tabla__botones" onclick="return(confirm('¿Desea eliminar el rol?'))"><img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}"></a></td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No hay roles registrados.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'rol_insertar' %}" class="agregar">+ Nuevo Rol </a>
+    </div>
+{% endblock %}
+

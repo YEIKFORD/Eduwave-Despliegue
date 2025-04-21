@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Crear Ambiente{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+    <form class="formulario-estructura" action="" method="POST">
+        <h2 class="formulario-estructura__titulo">Crear Ambiente</h2>
+        {% csrf_token %}
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="numero_ambiente">Numero Ambiente: </label>
+            <input class="formulario-estructura__campo" type="text" id="numero_ambiente" name="numero_ambiente" required>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="estado">Estado: </label><br>
+            <select class="formulario-estructura__campo" name="estado" id="estado" required>
+                <option value="">Seleccione un estado</option>
+                {% for valor, nombre in estados %}
+                    <option value="{{ valor }}">{{ nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="tipo_ambiente_id">Tipo de Ambiente: </label>
+            <select class="formulario-estructura__campo" name="tipo_ambiente_id" id="tipo_ambiente_id">
+                <option value="">Seleccione un tipo de ambiente</option>
+                {% for r in tipo_ambientes %}
+                <option value={{r.id}}>{{r.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="sede_id">Sede: </label>
+            <select class="formulario-estructura__campo" name="sede_id" id="sede_id">
+                <option value="">Seleccione una sede</option>
+                {% for r in sedes %}
+                <option value={{r.id}}>{{r.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <button  class="formulario-estructura__boton" type="submit" value="Crear" name="Guardar" class="submit-button">Crear</button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}
+
+
+

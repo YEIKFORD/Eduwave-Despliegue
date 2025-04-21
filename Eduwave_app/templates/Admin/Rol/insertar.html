@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Crear Rol{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+    <form class="formulario-estructura" action="" method="POST">
+        <h2 class="formulario-estructura__titulo">Crear Rol</h2>
+        {% csrf_token %}
+
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="nombre">Nombre:</label>
+            <input class="formulario-estructura__campo" type="text" id="nombre" name="nombre" required>
+        </div>
+
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="codigo">Código:</label>
+            <input class="formulario-estructura__campo" type="text" id="codigo" name="codigo" required>
+        </div>
+
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="descripcion">Descripción:</label>
+            <input class="formulario-estructura__campo" type="text" id="descripcion" name="descripcion" required>
+        </div>
+
+        <div class="formulario-estructura__grupo">
+            <button class="formulario-estructura__boton" type="submit" name="Guardar">Crear Rol</button>
+        </div>
+    </form>
+{% endblock %}
+
+
+

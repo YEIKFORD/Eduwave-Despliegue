@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Administrador{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+
+{% block content %}
+    <div class="contenedor">
+        <div class="barra-superior">
+            <a class="boton-crear" href="{% url 'novedad_insertar' %}">
+                <i class="fas fa-plus"></i> + Crear Novedad
+            </a>
+            <div class="barra-busqueda">
+                <i class="fas fa-bars"></i>
+                <input class="barra-busqueda__input" placeholder="Buscar Novedad" type="text">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+
+
+        <div class="barra-superior">
+            <a class="boton-crear" href="{% url 'administrador_listar' %}">
+                <i class="fas fa-plus"></i> + Listar Novedad
+            </a>
+            <div class="barra-busqueda">
+                <i class="fas fa-bars"></i>
+                <input class="barra-busqueda__input" placeholder="Buscar Novedad" type="text">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+
+        <div class="novedades-pendientes">Novedades Pendientes
+            <div class="novedades-pendientes__linea">
+            </div>
+        </div>
+        
+        <div class="logos">
+            <img alt="Icono de vista de lista" height="30" src="{% static 'img/lista.png' %}">
+            <img alt="Icono de filtro" height="30" src="{% static 'img/filtrar.png' %}">
+        </div>
+
+        <div class="novedad">
+            <div class="novedad__detalles">
+                <h3 class="novedad__titulo">Ambiente (Numero de Ambiente)</h3>
+                <p class="novedad__descripcion">Descripción (Una breve descripción de la novedad)</p>
+            </div>
+
+            <div class="novedad__fecha">Fecha: XX/XX/XX</div>
+
+            <div class="objeto">
+                <h3>Objeto a Cambiar:</h3>
+                <p>Tejado</p>
+            </div>
+
+            <div class="novedad__acciones">
+                <i class="fas fa-external-link-alt"></i>
+                <button class="novedad__boton">No apto</button>
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </div>
+        <div class="novedad">
+            <div class="novedad__detalles">
+                <h3 class="novedad__titulo">Ambiente (Numero de Ambiente)</h3>
+                <p class="novedad__descripcion">Descripción (Una breve descripción de la novedad)</p>
+            </div>
+
+            <div class="novedad__fecha">Fecha: XX/XX/XX</div>
+
+            <div class="objeto">
+                <h3>Objeto a Cambiar:</h3>
+                <p>Tejado</p>
+            </div>
+
+            <div class="novedad__acciones">
+                <i class="fas fa-external-link-alt"></i>
+                <button class="novedad__boton">No apto</button>
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </div>
+        <div class="novedad">
+            <div class="novedad__detalles">
+                <h3 class="novedad__titulo">Ambiente (Numero de Ambiente)</h3>
+                <p class="novedad__descripcion">Descripción (Una breve descripción de la novedad)</p>
+            </div>
+
+            <div class="novedad__fecha">Fecha: XX/XX/XX</div>
+
+            <div class="objeto">
+                <h3>Objeto a Cambiar:</h3>
+                <p>Tejado</p>
+            </div>
+
+            <div class="novedad__acciones">
+                <i class="fas fa-external-link-alt"></i>
+                <button class="novedad__boton">No apto</button>
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

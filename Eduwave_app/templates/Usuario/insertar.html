@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Registrarse{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+    <!-- Estilos de Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block header %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %} 
+<div class="formulario">
+    <form action="" method="POST">
+        <div class="formulario__titulo formulario__fila"><h3>Registro</h3></div><br>
+        {% csrf_token %}
+
+        <div class="formulario__grupo">
+            <label for="tipo_doc">Tipo de Documento</label><br>
+            <select class="formulario__seleccion" name="tipo_doc" id="tipo_doc" required>
+                <option selected disabled value="">Seleccione</option>
+                <option value="CC">Cédula de ciudadanía</option>
+                <option value="CE">Cédula de extranjería</option>
+                <option value="TI">Tarjeta de identidad</option>
+                <option value="PEP">Permiso especial de permanencia</option>
+                <option value="PPT">Permiso por protección temporal</option>
+                <option value="OT">Otro</option>
+            </select>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="numero_doc">Número de Documento:</label>
+            <input type="text" id="numero_doc" name="numero_doc" required>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" required pattern="\d{10}" title="El número debe tener 10 dígitos. Sin letras ni símbolos.">
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="rol_id">Rol:</label>
+            <select name="rol_id" id="rol_id" class="formulario__campo" required data-codigos='{{ codigos_roles|safe }}'>
+                <option selected disabled value="">Seleccione</option>
+                {% for rol in roles %}
+                    <option value="{{ rol.id }}" data-codigo="{{ rol.codigo }}">{{ rol.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="centro_id">Centro de Formación:</label>
+            <select name="centro_id" id="centro_id" class="formulario__campo" required>
+                <option selected disabled value="">Seleccione</option>
+                {% for centro in centros %}
+                    <option value="{{ centro.id }}">{{ centro.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Campo de fichas con Select2 -->
+        <div class="formulario__grupo" id="grupo_ficha" style="display: none;">
+            <label for="fichas">Seleccione las Fichas:</label>
+            <select name="fichas" id="fichas" class="formulario__campo" multiple="multiple" style="width: 100%;">
+                {% for ficha in fichas %}
+                    <option value="{{ ficha.id }}">{{ ficha.num_ficha }} - {{ ficha.programa.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="first_name">Nombre:</label>
+            <input type="text" id="first_name" name="first_name" required>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="last_name">Apellido:</label>
+            <input type="text" id="last_name" name="last_name" required>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="username">Nombre de Usuario:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="formulario__boton">
+            <input type="submit" value="Registrarse">
+        </div>
+
+        <p>¿Ya tiene cuenta? <a class="formulario__enlace" href="{% url 'login_usuario' %}">Click aquí</a></p>
+    </form>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rolSelect = document.getElementById('rol_id');
+        const fichaGroup = document.getElementById('grupo_ficha');
+        const fichaSelect = $('#fichas');
+
+        fichaSelect.select2({
+            placeholder: "Buscar fichas por número o programa",
+            allowClear: true
+        });
+
+        rolSelect.addEventListener('change', function () {
+            const selectedOption = rolSelect.options[rolSelect.selectedIndex];
+            const codigo = selectedOption.getAttribute('data-codigo');
+            if (codigo === 'INS' || codigo === 'APD') {
+                fichaGroup.style.display = 'block';
+            } else {
+                fichaGroup.style.display = 'none';
+                fichaSelect.val(null).trigger('change');
+            }
+        });
+    });
+</script>
+{% endblock %}

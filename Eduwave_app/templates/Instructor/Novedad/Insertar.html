@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Insertar Novedad{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+    <!-- CDN de Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data" class="formulario-estructura">
+    {% csrf_token %}
+    <h2 class="formulario-estructura__titulo">Registrar Novedad</h2>
+
+    <div class="formulario-estructura__grupo">
+        <label for="tipo_novedad" class="formulario-estructura__etiqueta">Tipo de Novedad:</label>
+        <select name="tipo_novedad" id="tipo_novedad" class="formulario-estructura__campo" required>
+            {% for tipo in tipo_novedades %}
+                <option value="{{ tipo.id }}" {% if novedad.tipo_novedad.id == tipo.id %}selected{% endif %}>{{ tipo.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="formulario-estructura__grupo">
+        <label for="descripcion" class="formulario-estructura__etiqueta">Descripción:</label>
+        <textarea name="descripcion" id="descripcion" class="formulario-estructura__campo" required></textarea>
+    </div>
+
+    <div id="campos_academica_disciplinaria">
+        <div class="formulario-estructura__grupo">
+            <label for="usuarios" class="formulario-estructura__etiqueta">Usuarios:</label>
+            <select name="usuarios[]" id="usuarios" multiple class="formulario-estructura__campo">
+                {% for u in usuarios %}
+                    <option value="{{ u.id }}">{{ u.get_full_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="formulario-estructura__grupo">
+            <label for="tipo_falta" class="formulario-estructura__etiqueta">Tipo de Falta:</label>
+            <select name="tipo_falta" id="tipo_falta" class="formulario-estructura__campo">
+                <option value="">Seleccione</option>
+                <option value="Leve">Leve</option>
+                <option value="Grave">Grave</option>
+                <option value="Gravisima">Gravísima</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="campo_ambiente">
+        <div class="formulario-estructura__grupo">
+            <label for="ambiente" class="formulario-estructura__etiqueta">Ambiente:</label>
+            <select name="ambiente" id="ambiente" class="formulario-estructura__campo">
+                <option value="">Seleccione</option>
+                {% for ambiente in ambientes %}
+                    <option value="{{ ambiente.id }}">{{ ambiente.numero_ambiente }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="formulario-estructura__grupo">
+        <label for="evidencia" class="formulario-estructura__etiqueta">Evidencia (opcional):</label>
+        <input type="file" name="evidencia" class="formulario-estructura__campo">
+    </div>
+
+    <div class="formulario-estructura__grupo">
+        <button type="submit" class="formulario-estructura__boton">Guardar</button>
+    </div>
+</form>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tipoNovedadSelect = document.getElementById("tipo_novedad");
+
+        $('#usuarios').select2({
+            placeholder: 'Selecciona uno o varios usuarios',
+            width: '100%',
+            minimumInputLength: 1,   
+            ajax: {
+                url: '{% url "usuario_search" %}', 
+                dataType: 'json',
+                delay: 250, 
+                data: function (params) {
+                    console.log("Buscando usuarios con el término: ", params.term);
+                    return {
+                        q: params.term, 
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data, params) {
+                    console.log("Respuesta de la búsqueda: ", data);
+                    params.page = params.page || 1;
+                    return {
+                        results: data.results,
+                        pagination: {
+                            more: data.pagination.more
+                        }
+                    };
+                },
+                cache: true
+            }
+        });
+
+        function toggleCampos() {
+            const tipo = tipoNovedadSelect.options[tipoNovedadSelect.selectedIndex].text;
+
+            const campoUsuarios = document.getElementById("campos_academica_disciplinaria");
+            const campoAmbiente = document.getElementById("campo_ambiente");
+
+            if (campoUsuarios && campoAmbiente) {
+                if (tipo === 'Académica' || tipo === 'Disciplinaria') {
+                    campoUsuarios.style.display = 'block';
+                    campoAmbiente.style.display = 'none';
+                } else if (tipo === 'Ambiente') {
+                    campoUsuarios.style.display = 'none';
+                    campoAmbiente.style.display = 'block';
+                } else {
+                    campoUsuarios.style.display = 'none';
+                    campoAmbiente.style.display = 'none';
+                }
+            }
+        }
+
+        tipoNovedadSelect.addEventListener("change", toggleCampos);
+        toggleCampos(); 
+    });
+</script>
+
+
+{% endblock %}

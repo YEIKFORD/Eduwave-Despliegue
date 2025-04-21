@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Listado de Novedades{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<div class="contenido-tabla">
+    <h2 class="titulo-listar">Listado de Novedades</h2>
+
+    <div class="contenedor-filtros">
+      <div class="boton-filtros" onclick="alternarMenuFiltros()">Filtrar ▼</div>
+      <div class="menu-filtros" id="menuFiltros">
+        <form method="get" action="{% url 'novedad_listar' %}" class="formulario-filtros">
+          
+          <!-- Campo de Aprendiz (sin label) -->
+          <div class="campo">
+            <select name="aprendiz" id="aprendiz">
+              <option value="">Aprendiz</option>
+              {% for usuario in usuarios %}
+                <option value="{{ usuario.id }}" {% if usuario.id == aprendiz_id %}selected{% endif %}>
+                  {{ usuario.get_full_name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <!-- Campo de Tipo de Novedad (sin label) -->
+          <div class="campo">
+            <select name="tipo_novedad" id="tipo_novedad">
+              <option value="">Tipo Novedad</option>
+              {% for tipo in tipos_novedad %}
+                <option value="{{ tipo.id }}" {% if tipo.id == tipo_novedad_id %}selected{% endif %}>{{ tipo.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <!-- Campo de Gravedad (con label) -->
+          <div class="campo">
+            <select name="gravedad" id="gravedad">
+              <option value="">Gravedad</option>
+              <option value="leve" {% if gravedad == 'leve' %}selected{% endif %}>Leve</option>
+              <option value="grave" {% if gravedad == 'grave' %}selected{% endif %}>Grave</option>
+              <option value="gravisima" {% if gravedad == 'gravisima' %}selected{% endif %}>Gravísima</option>
+            </select>
+          </div>
+          
+          <!-- Campo de Estado (con label) -->
+          <div class="campo">
+            <select name="estado" id="estado">
+              <option value="">Estado</option>
+              <option value="P" {% if estado == 'P' %}selected{% endif %}>Pendiente</option>
+              <option value="A" {% if estado == 'A' %}selected{% endif %}>Aprobado</option>
+              <option value="C" {% if estado == 'C' %}selected{% endif %}>Cerrado</option>
+            </select>
+          </div>
+          
+          <!-- Campo de Fecha Inicio (con label) -->
+          <div class="campo">
+            <label for="fecha_inicio">Fecha inicio:</label>
+            <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ fecha_inicio }}">
+          </div>
+          
+          <!-- Campo de Fecha Fin (con label) -->
+          <div class="campo">
+            <label for="fecha_fin">Fecha fin:</label>
+            <input type="date" name="fecha_fin" id="fecha_fin" value="{{ fecha_fin }}">
+          </div>
+          
+          <!-- Campo de Ordenar (con label) -->
+          <div class="campo">
+            <label for="orden">Ordenar:</label>
+            <select name="orden" id="orden">
+              <option value="">Ordenar</option>
+              <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Más reciente</option>
+              <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Más antiguo</option>
+            </select>
+          </div>
+          
+          <!-- Campo de Buscar (con label) -->
+          <div class="campo">
+            <label for="buscar">Buscar:</label>
+            <input type="text" name="buscar" id="buscar" placeholder="Descripción" value="{{ buscar }}">
+          </div>
+          
+          <!-- Botón de Enviar -->
+          <div class="campo">
+            <button type="submit" class="btn-aplicar">Aplicar filtros</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+      
+
+    <form class="fer" method="post" action="{% url 'novedad_eliminar_masivo' %}">
+        {% csrf_token %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onclick="toggleSeleccion(this)"></th>
+                    <th>Tipo</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Ambiente</th>
+                    <th>Responsable</th>
+                    <th>Evidencia</th>
+                    <th>Usuarios Involucrados</th>
+                    <th>Estado De ambiente</th>
+                    <th>Actualizar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for novedad in novedades %}
+                    <tr>
+                        <td><input type="checkbox" name="seleccionados" value="{{ novedad.id }}"></td>
+                        <td>{{ novedad.tipo_novedad.nombre }}</td>
+                        <td>{{ novedad.descripcion|truncatechars:50 }}</td>
+                        <td>{{ novedad.get_estado_display }}</td>
+                        <td>{{ novedad.fecha }}</td>
+                        <td>{{ novedad.ambiente }}</td>
+                        <td>{{ novedad.creado_por.get_full_name }} <br><small>({{ novedad.creado_por.rol.nombre }})</small></td>
+                        <td>
+                            {% if novedad.evidencia %}
+                                {% if novedad.es_imagen %}
+                                    <img src="{{ novedad.evidencia.url }}" alt="Previsualización" style="width: 100px; height: auto;"/>
+                                {% elif novedad.es_video %}
+                                    <video width="100" controls>
+                                        <source src="{{ novedad.evidencia.url }}" type="video/mp4">
+                                        Tu navegador no soporta el video.
+                                    </video>
+                                {% else %}
+                                    <a href="{{ novedad.evidencia.url }}" target="_blank">Ver Archivo</a>
+                                {% endif %}
+                            {% else %}
+                                No disponible
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% for usuario in novedad.usuarios.all %}
+                                {{ usuario.get_full_name }}{% if not forloop.last %}, {% endif %}
+                            {% empty %}
+                                Sin usuarios
+                            {% endfor %}
+                        </td>
+                        <td>{{ novedad.ambiente.estado }}</td>
+                        <td>
+                            <a href="{% url 'novedad_actualizar' novedad.id %}" class="tabla__botones"><img alt="Actualizar" src="{% static 'img/editar.png' %}"></a>
+                        </td>
+                        <td>
+                            <a href="{% url 'novedad_eliminar' novedad.id %}" class="tabla__botones" onclick="return(confirm('¿Desea eliminar la novedad?'))"><img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}"></a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="11">No hay ninguna novedad registrada.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a type="submit" class=" agregar boton-eliminar-seleccionados" onclick="return confirm('¿Deseas eliminar las novedades seleccionadas?')">Eliminar seleccionadas</a>
+        <a href="{% url 'novedad_insertar' %}" class="agregar">+ Registrar Novedad </a>
+
+    </form>
+
+
+    <div class="paginacion">
+        {% if novedades.has_previous %}
+            <a href="?page={{ novedades.previous_page_number }}&estado={{ estado }}&tipo_novedad={{ tipo_novedad_id }}&gravedad={{ gravedad }}&aprendiz={{ aprendiz_id }}&fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&orden={{ orden }}&buscar={{ buscar }}">Anterior</a>
+        {% endif %}
+        <span>Página {{ novedades.number }} de {{ novedades.paginator.num_pages }}</span>
+        {% if novedades.has_next %}
+            <a href="?page={{ novedades.next_page_number }}&estado={{ estado }}&tipo_novedad={{ tipo_novedad_id }}&gravedad={{ gravedad }}&aprendiz={{ aprendiz_id }}&fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&orden={{ orden }}&buscar={{ buscar }}">Siguiente</a>
+        {% endif %}
+    </div>
+
+</div>
+
+<script src="{% static 'js/filtro-formulario.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Crear Ficha{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<form class="formulario-estructura" action="" method="POST">
+    <h2 class="formulario-estructura__titulo">Crear Ficha</h2>
+    {% csrf_token %}
+
+    <div class="formulario-estructura__grupo">
+        <label class="formulario-estructura__etiqueta" for="num_ficha">Número de Ficha:</label>
+        <input class="formulario-estructura__campo" type="text" id="num_ficha" name="num_ficha" required>
+    </div>
+
+    <div class="formulario-estructura__grupo">
+        <label class="formulario-estructura__etiqueta" for="programa_id">Programa de Formación:</label>
+        <select class="formulario-estructura__campo" name="programa_id" id="programa_id" required>
+            <option value="" selected disabled>Seleccione un programa</option>
+            {% for programa in programas %}
+                <option value="{{ programa.id }}">{{ programa.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="formulario-estructura__grupo">
+        <button class="formulario-estructura__boton" type="submit">Guardar</button>
+    </div>
+</form>
+{% endblock %}

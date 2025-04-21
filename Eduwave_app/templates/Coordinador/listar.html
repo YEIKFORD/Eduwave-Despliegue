@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Coordinador{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+
+{% block content %}
+    <div class="contenedor">
+        <div class="barra-superior">
+            <a class="boton-crear" href="{% url 'novedad_insertar' %}">
+                + Crear Novedad
+            </a>
+            <div class="barra-busqueda">
+                <i class="fas fa-bars"></i>
+                <input class="barra-busqueda__input" placeholder="Buscar Novedad" type="text">
+                
+            </div>
+        </div>
+
+        <div class="novedades-pendientes">Novedades Pendientes
+            <div class="novedades-pendientes__linea">
+            </div>
+        </div>
+        
+        <div class="logos">
+            <img alt="Icono de vista de lista" height="30" src="{% static 'img/lista.png' %}">
+            <img alt="Icono de filtro" height="30" src="{% static 'img/filtrar.png' %}">
+        </div>
+
+        {% for novedad in novedades %}
+    <div class="novedad">
+        <div class="novedad__detalles">
+            <h3 class="novedad__titulo">Novedad {{ novedad.tipo_novedad.nombre }}</h3>
+        </div>
+        <div class="novedad__fecha">
+            Fecha: {{ novedad.fecha|date:"d/m/Y" }}
+        </div>
+        <div class="novedad__acciones">
+
+            <button class="ver-detalles" data-id="{{ novedad.id }}" title="Ver detalles">
+                <img src="{% static 'img/expandir-flechas.png' %}" alt="Ver detalles" class="icono-ver">
+            </button>
+
+            <a href="{% url 'aprobar_novedad' novedad.id %}" class="novedad__boton">
+                Aprobar
+            </a>
+            
+        </div>
+    </div>
+{% empty %}
+    <p>No hay novedades pendientes.</p>
+{% endfor %}
+
+        </div>
+    </div>
+    <div id="modal-detalles" class="modal">
+        <div class="modal-contenido">
+            <!-- Botón para cerrar el modal -->
+            <span class="cerrar">&times;</span>
+    
+            <!-- Título de la novedad -->
+            <h2 id="modal-titulo">Novedad (Tipo de Novedad)</h2>
+    
+            <!-- Fecha y Hora en dos columnas -->
+            <div class="modal-fecha-hora">
+                <div><strong>Fecha:</strong> <span id="modal-fecha">Fecha de la novedad</span></div>
+                <div><strong>Hora:</strong> <span id="modal-hora">Hora de la novedad</span></div>
+            </div>
+    
+            <!-- Subtítulo Descripción -->
+            <h3>Descripción</h3>
+            <!-- Descripción de la novedad -->
+            <p id="modal-descripcion">Descripción de la novedad...</p>
+    
+            <!-- Otros datos -->
+            <p><strong>Estado:</strong> <span id="modal-estado">Pendiente</span></p>
+            <p><strong>Ambiente:</strong> <span id="modal-ambiente">Ambiente de la novedad</span></p>
+            <p><strong>Creado por:</strong> <span id="modal-creado">Nombre del creador</span></p>
+    
+            <!-- Tipo de falta (para novedades ambientales) -->
+            <p id="modal-tipo-falta"><strong></strong> N/A</p>
+    
+            <!-- Evidencia -->
+            <div id="modal-evidencia">
+                <strong>Evidencia:</strong> Sin evidencia
+            </div>
+        </div>
+    </div>
+
+<script id="novedades-json" type="application/json">{{ novedades_json|safe }}</script>
+<script>
+document.querySelectorAll('.ver-detalles').forEach(boton => {
+boton.addEventListener('click', function () {
+    // Obtener el ID de la novedad desde el atributo 'data-id' del botón
+    const novedadId = this.getAttribute('data-id');
+    
+    fetch(`/novedad/${novedadId}/detalle/`)
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return response.text().then(text => { throw new Error(text) });
+        }
+    })
+    .then(data => {
+        const fechaCompleta = new Date(data.fecha);
+        const opcionesFecha = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        const opcionesHora = { hour: '2-digit', minute: '2-digit', hour12: false };
+        // Continúa con el procesamiento normal de los datos
+        document.getElementById('modal-titulo').textContent = `Novedad ${data.tipo_novedad || 'N/A'}`;
+        document.getElementById('modal-descripcion').textContent = data.descripcion || 'N/A';
+        document.getElementById('modal-fecha').textContent = fechaCompleta.toLocaleDateString('es-CO', opcionesFecha);
+        document.getElementById('modal-hora').textContent = fechaCompleta.toLocaleTimeString('es-CO', opcionesHora);
+        document.getElementById('modal-estado').textContent = traducirEstado(data.estado);
+        document.getElementById('modal-ambiente').textContent = data.numero_ambiente || 'No disponible';
+        document.getElementById('modal-creado').textContent = data.creado_por || 'Desconocido';
+        
+        const tipoCampo = document.getElementById('modal-tipo-falta');
+
+        if (data.tipo_novedad === 'Ambiente') {
+            tipoCampo.innerHTML = `<strong>Apto:</strong> ${data.apto || 'No disponible'}`;
+        } else {
+            tipoCampo.innerHTML = `<strong>Tipo de Falta:</strong> ${data.tipo_falta || 'N/A'}`;
+        }
+
+
+        const evidenciaContenedor = document.getElementById('modal-evidencia');
+        if (data.evidencia) {
+        const ext = data.evidencia.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+                evidenciaContenedor.innerHTML = `<img src="${data.evidencia.url}" alt="Evidencia" style="max-width:100%; border-radius:8px;">`;
+            } else {
+                evidenciaContenedor.innerHTML = `<a href="${data.evidencia.url}" target="_blank">Descargar evidencia</a>`;
+            }
+            } else {
+            evidenciaContenedor.innerHTML = 'Sin evidencia';
+            }
+
+        // Mostrar modal
+        document.getElementById('modal-detalles').style.display = 'block';
+    })
+    .catch(error => {
+        console.error('Error al cargar detalles:', error);
+    });
+});
+});
+
+
+
+// Traducir estado
+function traducirEstado(estado) {
+    switch (estado) {
+        case 'P': return 'Pendiente';
+        case 'A': return 'Aprobado';
+        case 'C': return 'Cerrado';
+        default: return 'N/A';
+    }
+}
+
+// Cerrar modal al hacer clic en la "x"
+    document.querySelector('.cerrar').addEventListener('click', function () {
+    document.getElementById('modal-detalles').style.display = 'none';
+    });
+
+    // Cerrar modal si el usuario hace clic fuera del contenido
+    window.addEventListener('click', function (event) {
+    const modal = document.getElementById('modal-detalles');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+    });
+
+    </script>
+    
+{% endblock %}
+
+

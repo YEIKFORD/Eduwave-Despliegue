@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Lista Tipos de Ambientes{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<div class="contenido-tabla">
+
+    <h2 class="titulo-listar">Listado de Tipos de Ambiente</h2>
+
+    <div class="contenedor-filtros">
+        <div class="boton-filtros" onclick="alternarMenuFiltros()">Filtrar ▼</div>
+        <div class="menu-filtros" id="menuFiltros">
+            <form method="get" action="{% url 'tipo_ambiente_listar' %}" class="formulario-filtros">
+                    <div class="campo">
+                    <label for="orden">Ordenar por:</label>
+                    <select name="orden" id="orden" onchange="this.form.submit()">
+                        <option value="">-- Seleccionar --</option>
+                        <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Nombre (A-Z)</option>
+                        <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Nombre (Z-A)</option>
+                    </select>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Actualizar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in tipo_ambiente %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.nombre}}</td>
+                <td>{{i.descripcion}}</td>
+                <td><a href="{% url 'tipo_ambiente_actualizar' i.id %}" class="tabla__botones"><img alt="Actualizar" src="{% static 'img/editar.png' %}"></a></td>
+                <td><a href="{% url 'tipo_ambiente_eliminar' i.id %}" class="tabla__botones" onclick="return(confirm('¿Desea eliminar el tipo de ambiente?'))"  ><img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}"></a></td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No hay tipos de ambientes registrados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+    <a href="{% url 'tipo_ambiente_insertar' %}" class="agregar">+ Nuevo tipo de ambiente </a>
+</div>
+<script src="{% static 'js/filtro-formulario.js' %}"></script>
+{% endblock %}
+
+

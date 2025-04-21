@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Admin{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+<div class="cuadricula">
+        <a href="{% url 'regional_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+        Regional
+        </a>
+    
+        <a href="{% url 'municipio_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M3 21h18v-2h-2v-8h-4v8h-2v-12h-4v12h-2v-6H3v8zm2-6h2v2H5v-2zm4-6h2v2H9v-2zm0 4h2v2H9v-2zm6 0h2v2h-2v-2z"/>
+        </svg>
+        Municipio
+        </a>
+    
+        <a href="{% url 'centro_formacion_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M12 3L2 9l10 6 10-6-10-6zm0 13l-7-4v5h14v-5l-7 4zm-1-9h2v2h-2V7z"/>
+        </svg>        
+        Centro Formacion
+        </a>
+    
+        <a href="{% url 'sede_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M4 2h16v20H4V2zm4 4h2v2H8V6zm0 4h2v2H8v-2zm0 4h2v2H8v-2zm4-8h2v2h-2V6zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zm4-8h2v2h-2V6zm0 4h2v2h-2v-2zm0 4h2v6h-2v-6z"/>
+        </svg>  
+        Sede
+        </a>
+    
+        <a href="{% url 'tipo_ambiente_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24">
+            <path d="M4 4h16v2H4V4zm0 4h10v2H4V8zm0 4h16v2H4v-2zm0 4h10v2H4v-2zm0 4h16v2H4v-2z"/>
+        </svg>
+        Tipo Ambiente
+        </a>
+    
+        <a href="{% url 'ambiente_listar' %}" class="cuadro">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Pizarra / frente del aula -->
+                <path d="M7 4h12v8H7z" />
+                <path d="M7 16h12" />
+                <!-- Silla más separada a la izquierda -->
+                <path d="M2 10v6" />       <!-- respaldo -->
+                <path d="M2 13h3" />       <!-- asiento -->
+                <path d="M5 13v3" />       <!-- pata derecha -->
+                <path d="M2 13v3" />       <!-- pata izquierda -->
+            </svg>
+        Ambiente
+        </a>
+    
+        <a href="{% url 'categoria_listar' %}" class="cuadro">
+
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M4 4h6v6H4V4zm0 10h6v6H4v-6zm10-10h6v6h-6V4zm0 10h6v6h-6v-6z"/>
+        </svg>
+        Categoria
+        </a>
+    
+        <a href="{% url 'sub_categoria_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24">
+            <path d="M4 6h16v2H4V6zm2 4h12v2H6v-2zm4 4h8v2h-8v-2zm2 4h4v2h-4v-2z"/>
+        </svg> 
+        Sub Categoria
+        </a>
+    
+        <a href="{% url 'inventario_listar' %}" class="cuadro">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/>
+                <path d="M3 7l9 4 9-4"/>
+                <path d="M12 11v10"/>
+            </svg>
+        inventario
+        </a>
+    
+        <a href="{% url 'red_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="
+                M12 2 L12 22
+                M2 12 L22 12
+                M4.2 4.2 L19.8 19.8
+                M4.2 19.8 L19.8 4.2
+            
+                M6 6
+                C8 8, 16 8, 18 6
+            
+                M6 18
+                C8 16, 16 16, 18 18
+            
+                M6 6
+                C7 9, 7 15, 6 18
+            
+                M18 6
+                C17 9, 17 15, 18 18
+                " />
+        </svg>
+        Red
+        </a>
+    
+        <a href="{% url 'programa_formacion_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zm-1 13.27L3 10.18v2.24l8 3.63 8-3.63v-2.24l-8 5.09z"/>
+        </svg>
+        Programa Formacion
+        </a>
+    
+        <a href="{% url 'ficha_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6V2zm9 7V3.5L19.5 9H15z"/></svg>
+        Ficha
+        </a>
+    
+        <a href="{% url 'rol_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4s-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            <path d="M19 2l.94 2.06L22 5l-2.06.94L19 8l-.94-2.06L16 5l2.06-.94L19 2z"/>
+        </svg>
+        Rol
+        </a>
+    
+        <a href="{% url 'usuario_listar' %}" class="cuadro">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
+        Usuario
+        </a>
+    
+        <a href="{% url 'tipo_novedad_listar' %}" class="cuadro">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 5a1 1 0 1 1 0.001 0zM4 11a1 1 0 1 1 0.001 0zM4 17a1 1 0 1 1 0.001 0z"/>
+                <path d="M8 5h12"/>
+                <path d="M8 11h12"/>
+                <path d="M8 17h12"/>
+            </svg>
+        Tipos de Novedad
+        </a>
+    
+        <a href="{% url 'novedad_listar' %}" class="cuadro">
+        <!-- Icono de lista o informe -->
+        <svg viewBox="0 0 24 24">
+            <path d="M3 3v18h18V3H3zm4 4h10v2H7V7zm0 4h10v2H7v-2zm0 4h6v2H7v-2z"/>
+        </svg>        
+        Novedades
+        </a>
+</div>
+
+{% endblock %}
+

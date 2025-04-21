@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Coordinador{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+
+{% block content %}
+    <div class="contenedor">
+        <div class="barra-superior">
+            <a class="boton-crear" href="{% url 'novedad_insertar' %}">
+                <i class="fas fa-plus"></i> Crear Novedad
+            </a>
+            <div class="barra-busqueda">
+                <i class="fas fa-bars"></i>
+                <input class="barra-busqueda__input" placeholder="Buscar Novedad" type="text">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+
+        <div class="novedades-pendientes">Novedades Pendientes
+            <div class="novedades-pendientes__linea">
+            </div>
+        </div>
+        
+        <div class="logos">
+            <img alt="Icono de vista de lista" height="30" src="{% static 'img/lista.png' %}">
+            <img alt="Icono de filtro" height="30" src="{% static 'img/filtrar.png' %}">
+        </div>
+
+            {% for novedad in novedades %}
+            <div class="novedad">
+                <div class="novedad__detalles">
+                    <h3 class="novedad__titulo">{{ novedad.ambiente }}</h3>
+                    <p class="novedad__descripcion">{{ novedad.descripcion }}</p>
+                </div>
+        
+                <div class="novedad__fecha">
+                    Fecha: {{ novedad.fecha|date:"d/m/Y" }}
+                </div>
+
+                <div class="objeto">
+                    <h3>Objeto a Cambiar:</h3>
+                    {% for item in novedad.inventario.all %}
+                        <p>{{ item.categoria.nombre }}-{{ item.codigo }}</p>
+                    {% empty %}
+                        <p>No hay inventarios asignados.</p>
+                    {% endfor %}
+                </div>
+                
+        
+                <div class="novedad__acciones">
+                    <i class="fas fa-external-link-alt"></i>
+                    <a href="{% url 'evaluar_novedad' novedad.id %}" class="novedad__boton">
+                        Apto
+                    </a>
+                    
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay novedades pendientes.</p>
+        {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}
+

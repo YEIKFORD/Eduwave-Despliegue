@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Aprendiz{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+<br><br>
+<div class="tituloo">
+    <h1> Consulte sus procesos </h1>
+  </div>
+  
+  <div class="tarjetas ">
+    <a href="{% url 'novedad_academica_listar' %}" class="tarjeta">
+      <img src="https://img.icons8.com/color/96/graduation-cap--v1.png" alt="Proceso Académico">
+      <h2>Proceso Académico</h2>
+    </a>
+  
+    <a href="proceso-disciplinario.html" class="tarjeta">
+      <img src="https://img.icons8.com/color/96/error--v1.png" alt="Proceso Disciplinario">
+      <h2>Proceso Disciplinario</h2>
+    </a>
+  
+    <a href="retiro-voluntario.html" class="tarjeta">
+      <img src="https://img.icons8.com/color/96/running.png" alt="Retiro Voluntario">
+      <h2>Retiro Voluntario</h2>
+    </a>
+  
+    <a href="desercion.html" class="tarjeta">
+      <img src="https://img.icons8.com/color/96/synchronize.png" alt="Deserción">
+      <h2>Consultar Proceso de Deserción</h2>
+    </a>
+  </div>
+  {% endblock %}
+

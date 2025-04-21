@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Actualizar Sub Categoria{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+    <form class="formulario-estructura" action="" method="POST">
+        <h2 class="formulario-estructura__titulo">Actualizar Sub Categoría</h2>
+        {% csrf_token %}
+        
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="nombre">Nombre: </label>
+            <input class="formulario-estructura__campo" type="text" id="nombre" name="nombre" value="{{ sub_categoria.nombre }}" required>
+        </div>
+        
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="categoria_id">Categoría: </label><br>
+            <select class="formulario-estructura__campo" name="categoria_id" id="categoria_id" required>
+                <option value="">Seleccione una categoría</option>
+                {% for i in categorias %}
+                <option value="{{ i.id }}" {% if sub_categoria.categoria.id == i.id %}selected{% endif %}>
+                    {{ i.nombre }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="formulario-estructura__grupo">
+            <button class="formulario-estructura__boton" type="submit">Actualizar</button>
+        </div>
+    </form> 
+{% endblock %}

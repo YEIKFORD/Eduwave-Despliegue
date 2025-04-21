@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Crear Sede{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+    <form class="formulario-estructura" action="" method="POST">
+        <h2 class="formulario-estructura__titulo" >Crear Sede</h2>
+        {% csrf_token %}
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="nombre">Codigo: </label>
+            <input class="formulario-estructura__campo" type="text" id="codigo" name="codigo" required>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="nombre">Nombre: </label>
+            <input class="formulario-estructura__campo" type="text" id="nombre" name="nombre" required>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="direccion">Direccion: </label>
+            <input class="formulario-estructura__campo" type="text" id="direccion" name="direccion" required>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="telefono">Telefono: </label>
+            <input class="formulario-estructura__campo" type="text" id="telefono" name="telefono" required>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="centro_formacion_id">Centro Formacion: </label>
+            <select class="formulario-estructura__campo" name="centro_formacion_id" id="centro_formacion_id">
+                {% for r in centro_formacion %}
+                <option value={{r.id}}>{{r.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <button class="formulario-estructura__boton" type="submit" value="Crear" name="Guardar">Guardar Sede</button>
+        </div>
+    </form>
+{% endblock %}
+
+
+

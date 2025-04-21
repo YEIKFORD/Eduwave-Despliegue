@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Actualizar Programa de Formacion{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+<form class="formulario-estructura" action="" method="POST">
+    <h2 class="formulario-estructura__titulo" >Actualizar Programa de Formacion</h2>
+    {% csrf_token %}
+
+    <div class="formulario-estructura__grupo">
+        <label class="formulario-estructura__etiqueta" for="nombre">Nombre: </label>
+        <input class="formulario-estructura__campo" type="text" id="nombre" name="nombre" value="{{programa_formacion.nombre}}" required>
+    </div>
+
+    <div class="formulario-estructura__grupo">
+        <label class="formulario-estructura__etiqueta" for="modalidad">Modalidad:</label>
+        <select class="formulario-estructura__campo" name="modalidad" id="modalidad" required>
+            <option value="">Seleccione una modalidad</option>
+            {% for clave, valor in modalidades %}
+                <option value="{{ clave }}" {% if clave == programa_formacion.modalidad %}selected{% endif %}>
+                    {{ valor }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="formulario-estructura__grupo">
+        <label class="formulario-estructura__etiqueta" for="red_id">Red: </label>
+        <select class="formulario-estructura__campo" name="red_id" id="red_id">
+            {% for r in red %}
+            <option value="{{ r.id }}" {% if red.id == programa_formacion.red.id %}selected{% endif %}>
+                {{ r.nombre }}
+            </option>
+        {% endfor %}
+        </select>
+    </div>
+    
+    <div class="formulario-estructura__grupo">
+        <button  class="formulario-estructura__boton" type="submit" value="Crear" name="Guardar">Actualizar</button>
+    </div>
+</form>
+{% endblock %}
+

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Actualizar Ambiente{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+    <form class="formulario-estructura" action="" method="POST">
+        <h2 class="formulario-estructura__titulo">Actualizar Ambiente</h2>
+        {% csrf_token %}
+
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="numero_ambiente">Numero Ambiente: </label>
+            <input class="formulario-estructura__campo" type="number" id="numero_ambiente" name="numero_ambiente" value="{{ambiente.numero_ambiente}}" required>
+        </div>
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="estado">Estado: </label><br>
+            <select class="formulario-estructura__campo" name="estado" id="estado" required>
+                {% for valor, nombre in estados %}
+                <option value="{{ valor }}" {% if ambiente.estado == valor %} selected {% endif %}>
+                    {{ nombre }}
+                </option>
+            {% endfor %}
+            </select>
+        </div>
+
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="tipo_ambiente_id">Tipo de Ambiente: </label>
+            <select class="formulario-estructura__campo" name="tipo_ambiente_id" id="tipo_ambiente_id">
+                {% for tipo in tipo_ambientes %}
+                <option value="{{ tipo.id }}" {% if ambiente.tipo_ambiente_id.id == tipo.id %}selected{% endif %}>
+                    {{ tipo.nombre }}
+                </option>
+            {% endfor %}
+            </select>
+        </div>
+
+        <div class="formulario-estructura__grupo">
+            <label class="formulario-estructura__etiqueta" for="sede_id">Sede: </label>
+            <select class="formulario-estructura__campo" name="sede_id" id="sede_id">
+                {% for sede in sedes %}
+                <option value="{{ sede.id }}" {% if ambiente.sede_id.id == sede.id %}selected{% endif %}>
+                    {{ sede.nombre }}
+                </option>
+            {% endfor %}
+            </select>
+        </div>
+        
+        <div class="formulario-estructura__grupo">
+            <button class="formulario-estructura__boton" type="submit" value="Crear" name="Guardar" class="submit-button">Actualizar</button>
+        </div>
+    </form>
+{% endblock %}
+
+

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Lista Regionales{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<div class="contenido-tabla">
+
+    <h2 class="titulo-listar">Listado de Regionales</h2>
+
+<div class="contenedor-filtros">
+
+    <div class="boton-filtros" onclick="alternarMenuFiltros()">Filtrar ▼</div>
+    <div class="menu-filtros" id="menuFiltros">
+            
+        <form method="get" action="{% url 'regional_listar' %}" class="formulario-filtros">
+            <div>
+            <input type="text" name="buscar_nombre" placeholder="Buscar por nombre" value="{{ request.GET.buscar_nombre }}">
+            </div>
+            <div>
+            <select name="orden">
+                <option value="">Ordenar</option>
+                <option value="nombre" {% if request.GET.orden == "nombre" %}selected{% endif %}>Nombre A-Z</option>
+                <option value="-nombre" {% if request.GET.orden == "-nombre" %}selected{% endif %}>Nombre Z-A</option>
+            </select>
+            </div>
+            <button type="submit">Filtrar</button>
+        </form>
+        </div>
+</div>
+
+    <form method="post" class="fer" action="{% url 'regional_eliminar_masivo' %}">
+        {% csrf_token %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onclick="toggleSeleccion(this)"></th>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Actualizar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in regional %}
+                <tr>
+                    <td><input type="checkbox" name="seleccionados" value="{{ r.id }}"></td>
+                    <td>{{ r.codigo }}</td>
+                    <td>{{ r.nombre }}</td>
+                    <td><a href="{% url 'regional_actualizar' r.id %}" class="tabla__botones"><img alt="Actualizar" src="{% static 'img/editar.png' %}"></a></td>
+                    <td><a href="{% url 'regional_eliminar' r.id %}" class="tabla__botones" onclick="return(confirm('¿Desea eliminar la regional?'))"><img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}"></a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No hay ninguna regional registrada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit" class=" agregar boton-eliminar-seleccionados" onclick="return confirm('¿Desea eliminar las seleccionadas?')">Eliminar seleccionadas</button>
+
+        <a href="{% url 'regional_insertar' %}" class="agregar">+ Nueva Regional </a>
+    </form>
+
+
+
+    <div class="paginacion">
+        {% if regional.has_previous %}
+            <a href="?page={{ regional.previous_page_number }}&buscar_nombre={{ request.GET.buscar_nombre }}&orden={{ request.GET.orden }}">Anterior</a>
+        {% endif %}
+        <span>Página {{ regional.number }} de {{ regional.paginator.num_pages }}</span>
+        {% if regional.has_next %}
+            <a href="?page={{ regional.next_page_number }}&buscar_nombre={{ request.GET.buscar_nombre }}&orden={{ request.GET.orden }}">Siguiente</a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+
+</script>
+
+<script src="{% static 'js/filtro-formulario.js' %}"></script>
+{% endblock %}

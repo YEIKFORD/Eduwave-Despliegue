@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lista Sub Categorias{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+<div class="contenido-tabla">
+
+    
+    <h2 class="titulo-listar">Listado de Subcatgorias</h2>
+
+<div class="contenedor-filtros">
+
+    <div class="boton-filtros" onclick="alternarMenuFiltros()">Filtrar ▼</div>
+    <div class="menu-filtros" id="menuFiltros">
+        <form method="get" class="formulario-filtros">
+                <div class="campo">
+                <input type="text" name="buscar" placeholder="Buscar por nombre" value="{{ buscar|default_if_none:'' }}">
+                </div>
+            
+                <div class="campo">
+                <select name="categoria_id" onchange="this.form.submit()">
+                    <option value="">Categorías</option>
+                    {% for cat in categorias %}
+                    <option value="{{ cat.id }}" {% if cat.id == categoria_id %}selected{% endif %}>{{ cat.nombre }}</option>
+                    {% endfor %}
+                </select>
+                </div>
+            
+                <div class="campo">
+                <select name="orden" onchange="this.form.submit()">
+                    <option value="">Ordenar</option>
+                    <option value="asc" {% if orden == 'asc' %}selected{% endif %}>A-Z</option>
+                    <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Z-A</option>
+                </select>
+                </div>
+            
+                <div class="campo">
+                <button type="submit" class="btn-aplicar">Filtrar</button>
+                </div>
+            </form>          
+    </div>
+</div>
+
+    <form method="post" class="fer">
+        {% csrf_token %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="seleccionar-todos" onclick="toggleSeleccionados(this)"></th>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Actualizar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in sub_categorias %}
+                <tr>
+                    <td><input type="checkbox" name="seleccionados" value="{{ i.id }}"></td>
+                    <td>{{ i.id }}</td>
+                    <td>{{ i.nombre }}</td>
+                    <td>{{ i.categoria.nombre }}</td>
+                    <td>
+                        <a href="{% url 'sub_categoria_actualizar' i.id %}" class="tabla__botones">
+                            <img alt="Actualizar" src="{% static 'img/editar.png' %}">
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'sub_categoria_eliminar' i.id %}" class="tabla__botones" onclick="return confirm('¿Desea eliminar la sub categoría?')">
+                            <img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}">
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No hay sub categorías registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit" class=" agregar boton-eliminar-seleccionados" name="eliminar_seleccionados" onclick="return confirm('¿Eliminar seleccionados?')">Eliminar seleccionados</button>
+        <a href="{% url 'sub_categoria_insertar' %}" class="agregar">+ Nueva Sub Categoría</a>
+
+    </form>
+
+    <div class="paginacion">
+        <span>Página {{ sub_categorias.number }} de {{ sub_categorias.paginator.num_pages }}</span>
+        {% if sub_categorias.has_previous %}
+            <a href="?{% if categoria_id %}categoria_id={{ categoria_id }}&{% endif %}{% if orden %}orden={{ orden }}&{% endif %}{% if buscar %}buscar={{ buscar }}&{% endif %}page={{ sub_categorias.previous_page_number }}">Anterior</a>
+        {% endif %}
+        {% if sub_categorias.has_next %}
+            <a href="?{% if categoria_id %}categoria_id={{ categoria_id }}&{% endif %}{% if orden %}orden={{ orden }}&{% endif %}{% if buscar %}buscar={{ buscar }}&{% endif %}page={{ sub_categorias.next_page_number }}">Siguiente</a>
+        {% endif %}
+    </div>
+
+</div>
+
+<script src="{% static 'js/filtro-formulario.js' %}"></script>
+
+{% endblock %}

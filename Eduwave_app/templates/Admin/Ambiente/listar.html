@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Lista Ambientes{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<div class="contenido-tabla">
+    <h2 class="titulo-listar">Listado de Ambientes</h2>
+
+<div class="contenedor-filtros">
+
+    <div class="boton-filtros" onclick="alternarMenuFiltros()">Filtrar ▼</div>
+    <div class="menu-filtros" id="menuFiltros">
+        <form method="get" action="{% url 'ambiente_listar' %}" class="formulario-filtros">
+                <div class="campo">
+                <input type="text" name="busqueda" placeholder="Buscar por número" value="{{ busqueda }}">
+                </div>
+            
+                <div class="campo">
+                <select name="sede_id" onchange="this.form.submit()">
+                    <option value="">Sedes</option>
+                    {% for s in sedes %}
+                    <option value="{{ s.id }}" {% if s.id|stringformat:"s" == sede_id %}selected{% endif %}>{{ s.nombre }}</option>
+                    {% endfor %}
+                </select>
+                </div>
+            
+                <div class="campo">
+                <select name="tipo_id" onchange="this.form.submit()">
+                    <option value="">Tipos</option>
+                    {% for t in tipos_ambiente %}
+                    <option value="{{ t.id }}" {% if t.id|stringformat:"s" == tipo_id %}selected{% endif %}>{{ t.nombre }}</option>
+                    {% endfor %}
+                </select>
+                </div>
+            
+                <div class="campo">
+                <select name="orden" onchange="this.form.submit()">
+                    <option value="">-- Ordenar --</option>
+                    <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Número (A-Z)</option>
+                    <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Número (Z-A)</option>
+                </select>
+                </div>
+            
+                <div class="campo">
+                <button type="submit" class="btn-aplicar">Filtrar</button>
+                </div>
+            
+            </form>          
+    </div>
+</div>
+
+    <form method="post" class="fer" action="{% url 'ambiente_eliminar_varios' %}">
+        {% csrf_token %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="seleccionar-todos" onclick="toggleCheckboxes(this)"></th>
+                    <th>Número Ambiente</th>
+                    <th>Estado</th>
+                    <th>Tipo</th>
+                    <th>Sede</th>
+                    <th>Actualizar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in ambientes %}
+                    <tr>
+                        <td><input type="checkbox" name="seleccionados" value="{{ i.id }}"></td>
+                        <td>{{ i.numero_ambiente }}</td>
+                        <td>{{ i.estado }}</td>
+                        <td>{{ i.tipo_ambiente.nombre }}</td>
+                        <td>{{ i.sede.nombre }}</td>
+                        <td><a href="{% url 'ambiente_actualizar' i.id %}" class="tabla__botones"><img alt="Actualizar" src="{% static 'img/editar.png' %}"></a></td>
+                <td><a href="{% url 'ambiente_eliminar' i.id %}" class="tabla__botones" onclick="return(confirm('¿Deseas eliminar el ambiente?'))"><img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}"></a></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="7">No hay ambientes registrados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit" class=" agregar boton-eliminar-seleccionados" onclick="return confirm('¿Deseas eliminar los ambientes seleccionados?')">Eliminar seleccionados</button>
+        <a href="{% url 'ambiente_insertar' %}" class="agregar">+ Nuevo Ambiente</a>
+    </form>
+
+    
+
+    <div class="paginacion">
+        {% if ambientes.has_previous %}
+            <a href="?page=1{{ request.GET.urlencode|cut:'page=' }}">Primero</a>
+            <a href="?page={{ ambientes.previous_page_number }}{{ request.GET.urlencode|cut:'page=' }}">Anterior</a>
+        {% endif %}
+
+        <span>Página {{ ambientes.number }} de {{ ambientes.paginator.num_pages }}</span>
+
+        {% if ambientes.has_next %}
+            <a href="?page={{ ambientes.next_page_number }}{{ request.GET.urlencode|cut:'page=' }}">Siguiente</a>
+            <a href="?page={{ ambientes.paginator.num_pages }}{{ request.GET.urlencode|cut:'page=' }}">Último</a>
+        {% endif %}
+    </div>
+</div>
+
+<script src="{% static 'js/filtro-formulario.js' %}"></script>
+{% endblock %}

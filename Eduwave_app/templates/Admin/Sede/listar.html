@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Lista Sedes{% endblock %}
+
+{% block estilos %}              
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<div class="contenido-tabla">
+    <!-- Filtros y búsqueda -->
+    <h2 class="titulo-listar">Listado de Sedes</h2>
+
+    <div class="contenedor-filtros">
+        <div class="boton-filtros" onclick="alternarMenuFiltros()">Filtrar ▼</div>
+        <div class="menu-filtros" id="menuFiltros">
+                <form method="get" action="{% url 'sede_listar' %}" class="formulario-filtros">
+
+                    <div class="campo">
+                    <label for="centro_id">Centro de Formación:</label>
+                    <select name="centro_id" id="centro_id" onchange="this.form.submit()">
+                        <option value="">Todos</option>
+                        {% for c in centros %}
+                        <option value="{{ c.id }}" {% if c.id == centro_id_seleccionado %}selected{% endif %}>{{ c.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                
+                    <div class="campo">
+                    <label for="orden">Ordenar:</label>
+                    <select name="orden" id="orden" onchange="this.form.submit()">
+                        <option value="">-- Seleccionar --</option>
+                        <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Nombre (A-Z)</option>
+                        <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Nombre (Z-A)</option>
+                    </select>
+                    </div>
+                
+                    <div class="campo">
+                    <label for="orden">Nombre:</label>
+                    <input type="text" name="busqueda" placeholder="Buscar" value="{{ busqueda }}">
+                    </div>
+                
+                    <div class="campo">
+                    <button type="submit" class="btn-aplicar">Filtrar</button>
+                    </div>
+                </form>
+        </div>
+    </div>
+    <!-- Tabla con checkbox -->
+    <form method="post" class="fer" action="{% url 'sede_eliminar_seleccionados' %}">
+        {% csrf_token %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select_all"></th>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Centro de Formación</th>
+                    <th>Actualizar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in sedes %}
+                <tr>
+                    <td><input type="checkbox" name="ids" value="{{ i.id }}"></td>
+                    <td>{{ i.codigo }}</td>
+                    <td>{{ i.nombre }}</td>
+                    <td>{{ i.direccion }}</td>
+                    <td>{{ i.telefono }}</td>
+                    <td>{{ i.centro_formacion.nombre }}</td>
+                    <td><a href="{% url 'sede_actualizar' i.id %}" class="tabla__botones"><img src="{% static 'img/editar.png' %}" alt="Actualizar"></a></td>
+                    <td><a href="{% url 'sede_eliminar' i.id %}" class="tabla__botones" onclick="return confirm('¿Desea eliminar la sede?')"><img src="{% static 'img/bote-de-basura.png' %}" alt="Eliminar"></a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8">No hay sedes registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit" class=" agregar boton-eliminar-seleccionados" onclick="return confirm('¿Desea eliminar las seleccionadas?')">Eliminar seleccionadas</button>
+        <a href="{% url 'sede_insertar' %}" class="agregar">+ Nueva Sede</a>
+    </form>
+
+    <!-- Paginación -->
+    <div class="paginacion">
+        {% if sedes.has_previous %}
+            <a href="?page={{ sedes.previous_page_number }}{% if centro_id_seleccionado %}&centro_id={{ centro_id_seleccionado }}{% endif %}{% if orden %}&orden={{ orden }}{% endif %}{% if busqueda %}&busqueda={{ busqueda }}{% endif %}">&laquo; Anterior</a>
+        {% endif %}
+
+        <span>Página {{ sedes.number }} de {{ sedes.paginator.num_pages }}</span>
+
+        {% if sedes.has_next %}
+            <a href="?page={{ sedes.next_page_number }}{% if centro_id_seleccionado %}&centro_id={{ centro_id_seleccionado }}{% endif %}{% if orden %}&orden={{ orden }}{% endif %}{% if busqueda %}&busqueda={{ busqueda }}{% endif %}">Siguiente &raquo;</a>
+        {% endif %}
+    </div>
+
+    
+</div>
+
+<script src="{% static 'js/filtro-formulario.js' %}"></script>
+{% endblock %}

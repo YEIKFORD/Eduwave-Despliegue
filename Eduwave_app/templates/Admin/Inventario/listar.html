@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Lista inventario{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+<div class="contenido-tabla">
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Categoria</th>
+                <th>Ambiente</th>
+                <th>Fecha Adquisición:</th>
+                <th># Placa Almacen:</th>
+                <th>Precio de Compra:</th>
+                <th>Actualizar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in inventarios %}
+            <tr>
+                <td>{{i.codigo}}</td>
+                <td>{{i.nombre}}</td>
+                <td>{{i.descripcion}}</td>
+                <td>{{i.categoria.nombre}}</td>
+                <td>{{i.ambiente.numero_ambiente}} - {{i.ambiente.tipo_ambiente.nombre}}- {{i.ambiente.sede.nombre}}</td>
+                <td>{{i.fecha_adquisicion}}</td>
+                <td>{{i.num_placa_almacen}}</td>
+                <td>{{i.precio_compra}}</td>
+                <td><a href="{% url 'inventario_actualizar' i.id %}" class="tabla__botones"><img alt="Actualizar" src="{% static 'img/editar.png' %}"></a></td>
+                <td><a href="{% url 'inventario_eliminar' i.id %}" class="tabla__botones" onclick="return(confirm('¿Desea eliminar el inventario?'))"><img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}"></a></td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="9">No hay inventario registrado.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'inventario_insertar' %}" class="agregar">+ Nuevo inventario </a>
+</div>
+{% endblock %}
+
+

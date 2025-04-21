@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block estilos %}
+  {{ block.super }}
+{% endblock %}
+
+{% block body_class %}
+  {{ block.super }}
+{% endblock body_class %}
+
+{% block header %}
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="pagina__titulo">Edu Wave</h1>
+  <div class="pagina__linea1"></div>
+  <div class="pagina__linea2"></div>
+  <p class="pagina__descripcion">Gestor de novedades Académicas, Disciplinarias y Ambientales del SENA</p>
+
+  <section class="pagina__acciones">
+      <div class="accion">
+          <h2 class="accion__titulo">Consulta Novedades</h2>
+          <span class="accion__icono"><img src="{% static 'img/lupa.png' %}" alt="Ícono de búsqueda"></span>
+      </div>
+      <div class="accion">
+          <h2 class="accion__titulo">Reporta Novedades</h2>
+          <span class="accion__icono"><img src="{% static 'img/formulario.png' %}" alt="Ícono de reporte"></span>
+      </div>
+      <div class="accion">
+          <h2 class="accion__titulo">Seguimiento</h2>
+          <span class="accion__icono"><img src="{% static 'img/archivos.png' %}" alt="Ícono de seguimiento"></span>
+      </div>
+  </section>
+{% endblock %}
+
+

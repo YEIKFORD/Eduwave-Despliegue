@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Lista Centros de Formacion{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<div class="contenido-tabla">
+
+    <h2 class="titulo-listar">Listado de Centros de Formacion</h2>
+
+    <div class="contenedor-filtros">
+        <div class="boton-filtros" onclick="alternarMenuFiltros()">Filtrar ▼</div>
+        <div class="menu-filtros" id="menuFiltros">
+            <form method="get" action="{% url 'centro_formacion_listar' %}" class="formulario-filtros">
+
+                    <div class="campo">
+                    <label for="municipio_id">Municipio:</label>
+                    <select name="municipio_id" id="municipio_id" onchange="this.form.submit()">
+                        <option value="">Todos</option>
+                        {% for r in municipios %}
+                        <option value="{{ r.id }}" {% if r.id == municipio_id_seleccionada %}selected{% endif %}>{{ r.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                
+                    <div class="campo">
+                    <label for="orden">Ordenar por:</label>
+                    <select name="orden" id="orden" onchange="this.form.submit()">
+                        <option value="">-- Seleccionar --</option>
+                        <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Nombre (A-Z)</option>
+                        <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Nombre (Z-A)</option>
+                    </select>
+                    </div>
+                
+                    <div class="campo">
+                    <label for="municipio_id">Nombre:</label>
+                    <input type="text" name="busqueda" placeholder="Buscar" value="{{ busqueda }}">
+                    </div>
+                
+                    <div class="campo">
+                    <button type="submit" class="btn-aplicar">Filtrar</button>
+                    </div>
+                
+                </form>
+                
+        </div>
+    </div>
+
+    <form method="post" class="fer" action="{% url 'centro_formacion_eliminar_seleccionados' %}">
+        {% csrf_token %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select_all"></th>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Municipio</th>
+                    <th>Actualizar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in centros_formacion %}
+                <tr>
+                    <td><input type="checkbox" name="ids" value="{{ r.id }}"></td>
+                    <td>{{ r.codigo }}</td>
+                    <td>{{ r.nombre }}</td>
+                    <td>{{ r.direccion }}</td>
+                    <td>{{ r.telefono }}</td>
+                    <td>{{ r.municipio.nombre }}</td>
+                    <td><a href="{% url 'centro_formacion_actualizar' r.id %}" class="tabla__botones"><img src="{% static 'img/editar.png' %}" alt="Actualizar"></a></td>
+                    <td><a href="{% url 'centro_formacion_eliminar' r.id %}" class="tabla__botones" onclick="return confirm('¿Desea eliminar este centro de formación?')"><img src="{% static 'img/bote-de-basura.png' %}" alt="Eliminar"></a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8">No hay centros de formación registrados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit" class=" agregar boton-eliminar-seleccionados" onclick="return confirm('¿Desea eliminar los seleccionados?')">Eliminar seleccionados</button>
+        <a href="{% url 'centro_formacion_insertar' %}" class="agregar">+ Nuevo Centro de Formación</a>
+    </form>
+
+    <div class="paginacion">
+        {% if centros_formacion.has_previous %}
+            <a href="?page={{ centros_formacion.previous_page_number }}{% if municipio_id_seleccionada %}&municipio_id={{ municipio_id_seleccionada }}{% endif %}{% if orden %}&orden={{ orden }}{% endif %}{% if busqueda %}&busqueda={{ busqueda }}{% endif %}">&laquo; Anterior</a>
+        {% endif %}
+
+        <span>Página {{ centros_formacion.number }} de {{ centros_formacion.paginator.num_pages }}</span>
+
+        {% if centros_formacion.has_next %}
+            <a href="?page={{ centros_formacion.next_page_number }}{% if municipio_id_seleccionada %}&municipio_id={{ municipio_id_seleccionada }}{% endif %}{% if orden %}&orden={{ orden }}{% endif %}{% if busqueda %}&busqueda={{ busqueda }}{% endif %}">Siguiente &raquo;</a>
+        {% endif %}
+    </div>
+
+    
+</div>
+
+<script src="{% static 'js/filtro-formulario.js' %}"></script>
+{% endblock %}

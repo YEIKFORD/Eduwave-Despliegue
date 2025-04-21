@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Instructor{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+
+{% block content %}
+<div class="logo">
+    <img class="logoo" src="{% static 'img/logo_sena.svg' %}" alt="Logo SENA">
+</div>
+
+<div class="contenedor-boton">
+    <a class="boton-novedades" href="{% url 'novedad_insertar' %}">Registrar Novedad</a>
+    <span class="info-tooltip">
+        <h4>¿Qué tipo de novedades puedes registrar?</h4>
+        <div class="tooltip-contenido">
+        <p><strong>Académicas</strong></p>
+            <ul>
+            <li>Ausencias repetidas o sin justificación</li>
+            <li>Bajo rendimiento académico</li>
+            <li>Incumplimiento de tareas o trabajos</li>
+            <li>Necesidad de apoyo pedagógico</li>
+            </ul>
+        
+            <p><strong>Disciplinarias</strong></p>
+            <ul>
+            <li>Irrespeto a compañeros o docentes</li>
+            <li>Agresiones físicas o verbales</li>
+            <li>Incumplimiento del reglamento</li>
+            <li>Uso de elementos prohibidos</li>
+            </ul>
+        
+            <p><strong>Ambientales</strong></p>
+            <ul>
+            <li>Mobiliario roto o en mal estado</li>
+            <li>Falta de aseo en el aula</li>
+            <li>Problemas de iluminación o ventilación</li>
+            <li>Incomodidades en el espacio de estudio</li>
+            </ul>
+            <div class="tooltip-imagenes">
+                <img src="{% static 'img/educacion.png' %}" alt="Académica" class="imagen-tooltip">
+                <img src="{% static 'img/satisfaccion.png' %}" alt="Disciplinaria" class="imagen-tooltip">
+                <img src="{% static 'img/aula.png' %}" alt="Ambiental" class="imagen-tooltip">
+            </div>
+        </div>
+    </span>
+</div>
+
+<div class="botones-secundarios">
+    <button class="boton-desercion">Deserción</button>
+    <button class="boton-consulta">Consultar Respuestas</button>
+</div>
+
+<script>
+    const boton = document.querySelector('.boton-novedades');
+    const tooltip = document.querySelector('.info-tooltip');
+
+    boton.addEventListener('mouseenter', () => {
+    tooltip.style.visibility = 'visible';
+    tooltip.style.opacity = '1';
+    });
+
+    boton.addEventListener('mouseleave', () => {
+    tooltip.style.visibility = 'hidden';
+    tooltip.style.opacity = '0';
+    });
+
+</script>
+{% endblock %}
+
+

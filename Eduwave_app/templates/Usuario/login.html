@@ -1,0 +1,47 @@
+{% extends 'base.html' %}  
+{% load static %} 
+
+{% block title %}Iniciar Sesion{% endblock %}  
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block nav %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="formulario">
+
+    <form class="form" action="" method="POST">
+        <div class="formulario__titulo">
+            <h3>Inicio Sesión</h3>
+        </div>
+        {% csrf_token %}
+
+        <div class="formulario__flex">
+            <div class="formulario__grupo--comun">
+                <label for="username">Nombre de Usuario:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="formulario__grupo--comun">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+        </div>
+
+        <p class="formulario__mensaje-error">{{ mensaje_error }}</p>
+
+        <div class="formulario__boton">
+            <input type="submit" value="Iniciar sesión">
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Actualizar Centro de Formacion{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+{% block content %}
+<form class="formulario-estructura" action="" method="POST">
+    <h2 class="formulario-estructura__titulo" >Actualizar Centro de Formacion</h2>
+    {% csrf_token %}
+    <div class="formulario-estructura__grupo">
+        <label class="formulario-estructura__etiqueta" for="codigo">Codigo: </label>
+        <input class="formulario-estructura__campo" type="text" id="codigo" name="codigo" value="{{centro_formacion.codigo}}" required>
+    </div>
+    <div class="formulario-estructura__grupo">
+        <label class="formulario-estructura__etiqueta" for="nombre">Nombre: </label>
+        <input class="formulario-estructura__campo" type="text" id="nombre" name="nombre" value="{{centro_formacion.nombre}}" required>
+    </div>
+    <div class="formulario-estructura__grupo">
+        <label class="formulario-estructura__etiqueta" for="direccion">Direccion: </label>
+        <input class="formulario-estructura__campo" type="text" id="direccion" name="direccion" value="{{centro_formacion.direccion}}" required>
+    </div>
+    <div class="formulario-estructura__grupo">
+        <label class="formulario-estructura__etiqueta" for="telefono">Telefono: </label>
+        <input class="formulario-estructura__campo" type="text" id="telefono" name="telefono" value="{{centro_formacion.telefono}}" required>
+    </div>
+    <div class="formulario-estructura__grupo">
+        <label class="formulario-estructura__etiqueta" for="municipio_id">Municipio: </label>
+        <select class="formulario-estructura__campo" name="municipio_id" id="municipio_id">
+            {% for municipio in municipios %}
+            <option value="{{ municipio.id }}" {% if regional.id == centro_formacion.municipio.id %}selected{% endif %}>
+                {{ municipio.nombre }}
+            </option>
+        {% endfor %}
+        </select>
+    </div>
+    
+    <div class="formulario-estructura__grupo">
+        <button  class="formulario-estructura__boton" type="submit" value="Crear" name="Guardar">Actualizar</button>
+    </div>
+</form>
+{% endblock %}

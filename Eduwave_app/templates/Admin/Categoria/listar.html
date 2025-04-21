@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lista Categorías{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<div class="contenido-tabla">
+
+    <h2 class="titulo-listar">Listado de Categorias</h2>
+
+<div class="contenedor-filtros">
+
+    <div class="boton-filtros" onclick="alternarMenuFiltros()">Filtrar ▼</div>
+    <div class="menu-filtros" id="menuFiltros">
+        <form method="get" action="{% url 'categoria_listar' %}" class="formulario-filtros">
+                <div class="campo">
+                <input type="text" name="buscar" placeholder="Buscar categoría..." value="{{ buscar }}">
+                </div>
+            
+                <div class="campo">
+                <select name="orden" id="orden" onchange="this.form.submit()">
+                    <option value=" ">Ordenar</option>
+                    <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Nombre (A-Z)</option>
+                    <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Nombre (Z-A)</option>
+                </select>
+                </div>
+            
+                <div class="campo">
+                <button type="submit" class="btn-aplicar">Filtrar</button>
+                </div>
+            
+            </form>          
+    </div>
+</div>
+
+    <form method="post" class="fer" action="{% url 'categoria_eliminar_masivo' %}">
+        {% csrf_token %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onclick="toggleSeleccion(this)"></th>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Actualizar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in categorias %}
+                <tr>
+                    <td><input type="checkbox" name="seleccionados" value="{{ i.id }}"></td>
+                    <td>{{ i.id }}</td>
+                    <td>{{ i.nombre }}</td>
+                    <td><a href="{% url 'categoria_actualizar' i.id %}" class="tabla__botones"><img alt="Actualizar" src="{% static 'img/editar.png' %}"></a></td>
+                    <td><a href="{% url 'categoria_eliminar' i.id %}" class="tabla__botones" onclick="return confirm('¿Deseas eliminar la categoría?')"><img alt="Eliminar" src="{% static 'img/bote-de-basura.png' %}"></a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No hay categorías registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit" class=" agregar boton-eliminar-seleccionados" onclick="return confirm('¿Deseas eliminar las categorías seleccionadas?')">Eliminar seleccionados</button>
+        <a href="{% url 'categoria_insertar' %}" class="agregar">+ Nueva Categoría</a>
+    </form>
+
+    
+
+    <div class="paginacion">
+        {% if categorias.has_previous %}
+            <a href="?page={{ categorias.previous_page_number }}&buscar={{ buscar }}&orden={{ orden }}">Anterior</a>
+        {% endif %}
+
+        <span>Página {{ categorias.number }} de {{ categorias.paginator.num_pages }}</span>
+
+        {% if categorias.has_next %}
+            <a href="?page={{ categorias.next_page_number }}&buscar={{ buscar }}&orden={{ orden }}">Siguiente</a>
+        {% endif %}
+    </div>
+</div>
+
+<script src="{% static 'js/filtro-formulario.js' %}"></script>
+{% endblock %}

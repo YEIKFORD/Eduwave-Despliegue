@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'img/logo_eduwave.png' %}">
+
+    {% block estilos %}<link rel="stylesheet" href="{% static 'css/estilos.css' %}">{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+{% if messages %}
+    <div id="toast-container">
+        {% for message in messages %}
+        <div class="toast {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+
+{% endif %}
+<body id="contenedor" class="{% block body_class %}inicio{% endblock body_class %}">
+
+    <header class="pagina__encabezado {% if user.is_authenticated %}con-encabezado{% endif %}">
+        <div class="pagina__logo">
+            <a href="{% url 'home' %}"><img src="{% static 'img/logo_sena.svg' %}" alt="Logo SENA" class="logoo"></a>
+        </div>
+        {% block header %}
+        <nav class="pagina__navegacion {% if user.is_authenticated %}con-parrafo{% endif %}"> 
+<!-- ----------Navegacion Administrador De Edificios ---------- -->
+            {% if user.rol.codigo == "ADM" %}
+                
+            {% endif %}
+<!-- ------------------------------------------------------------------------------------------------------- -->
+
+<!-- ----------Navegacion Aprendiz ---------- -->
+            {% if user.rol.codigo == "APR" %}
+            {% endif %}
+<!-- ------------------------------------------------------------------------------------------------------- -->
+
+<!-- ----------Navegacion Coordinador ---------- -->
+            {% if user.rol.codigo == "COO" %}
+                
+            {% endif %}
+<!-- ------------------------------------------------------------------------------------------------------- -->
+
+<!-- ----------Navegacion Instructor ---------- -->
+            {% if user.rol.codigo == "INS" %}
+            {% endif %}
+<!-- ------------------------------------------------------------------------------------------------------- -->
+
+<!-- ----------Navegacion Administrador del sistema ---------- -->
+            {% if user.rol.codigo == "ADS" %}
+            
+            {% endif %}
+<!-- ------------------------------------------------------------------------------------------------------- -->
+
+<!--------------Navegacion Sesion Iniciada---------------- -->
+            {% if user.is_authenticated %}
+
+                <p class="pagina__bienvenida" >Bienvenido, {{ user.username }} ({{ user.rol.nombre }})</p>
+                <a href="{% url 'redireccion_usuario' %}" class="pagina__enlace">Inicio</a>
+                <a href="{% url 'novedad_listar' %}" class="pagina__enlace">Novedades</a>
+                <a href="{% url 'logout_usuario' %}" class="inicio-sesion">Cerrar sesión</a>
+
+            {% else %}
+                <a href="{% url 'usuario_insertar' %}" class="pagina__enlace">Registrarse</a>
+                <a href="{% url 'rol_insertar' %}" class="pagina__enlace">Rol</a>
+                <a href="{% url 'login_usuario' %}" class="inicio-sesion">Iniciar Sesion</a>
+            {% endif %}
+<!-- ------------------------------------------------------------------------------------------------------- -->
+
+
+        </nav>
+        {% endblock %}
+    </header>
+
+    <main class="pagina__contenido">
+        <button id="toggleMode" aria-label="Cambiar modo oscuro">
+            <img id="modeIcon" src="{% static 'img/soleado.png' %}" alt="Icono modo" />
+            <span class="switch">
+                <span class="circle"></span>
+            </span>
+        </button>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="pagina__pie">
+        <p class="pagina__contacto">123-456-789</p>
+        <p class="pagina__contacto">correoelectronico@gmail.com</p>
+    </footer>
+
+    <script src="{% static 'js/tema-color.js' %}"></script>
+    <script src="{% static 'js/toast.js' %}"></script>
+
+</body>
+</html>

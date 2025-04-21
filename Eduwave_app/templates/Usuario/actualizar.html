@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Actualizar Usuario{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block header %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="formulario">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="formulario__titulo formulario__fila"><h3>Actualizar Usuario</h3></div><br>
+
+        <div class="formulario__grupo">
+            <label for="tipo_doc">Tipo de Documento</label><br>
+            <select class="formulario__seleccion" name="tipo_doc" id="tipo_doc" required>
+                <option disabled value="">Seleccione</option>
+                <option value="CC" {% if usuario.tipo_doc == "CC" %}selected{% endif %}>Cédula de ciudadanía</option>
+                <option value="CE" {% if usuario.tipo_doc == "CE" %}selected{% endif %}>Cédula de extranjería</option>
+                <option value="TI" {% if usuario.tipo_doc == "TI" %}selected{% endif %}>Tarjeta de identidad</option>
+                <option value="PEP" {% if usuario.tipo_doc == "PEP" %}selected{% endif %}>Permiso especial de permanencia</option>
+                <option value="PPT" {% if usuario.tipo_doc == "PPT" %}selected{% endif %}>Permiso por protección temporal</option>
+                <option value="OT" {% if usuario.tipo_doc == "OT" %}selected{% endif %}>Otro</option>
+            </select>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="numero_doc">Número de Documento:</label>
+            <input type="text" id="numero_doc" name="numero_doc" value="{{ usuario.numero_doc }}" required>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" value="{{ usuario.telefono }}" required pattern="\d{10}" title="El número debe tener 10 dígitos. Sin letras ni símbolos.">
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="rol_id">Rol:</label>
+            <select name="rol_id" id="rol_id" class="formulario__campo" required>
+                <option disabled value="">Seleccione</option>
+                {% for rol in roles %}
+                    <option value="{{ rol.id }}" {% if usuario.rol.id == rol.id %}selected{% endif %} data-codigo="{{ rol.codigo }}">{{ rol.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="centro_id">Centro de Formación:</label>
+            <select name="centro_id" id="centro_id" class="formulario__campo" required>
+                <option disabled value="">Seleccione</option>
+                {% for centro in centros %}
+                    <option value="{{ centro.id }}" {% if usuario.centro.id == centro.id %}selected{% endif %}>{{ centro.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="formulario__grupo" id="grupo_ficha" style="display: none;">
+            <label>Seleccione las Fichas:</label>
+            <select id="fichas" name="fichas" class="formulario__campo" multiple="multiple" style="width: 100%;" required>
+                {% for ficha in fichas %}
+                    <option value="{{ ficha.id }}" {% if ficha in usuario.fichas.all %}selected{% endif %}>{{ ficha.num_ficha }} - {{ ficha.programa.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="first_name">Nombre:</label>
+            <input type="text" id="first_name" name="first_name" value="{{ usuario.first_name }}" required>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="last_name">Apellido:</label>
+            <input type="text" id="last_name" name="last_name" value="{{ usuario.last_name }}" required>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="username">Nombre de Usuario:</label>
+            <input type="text" id="username" name="username" value="{{ usuario.username }}" required>
+        </div>
+
+        <div class="formulario__grupo">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ usuario.email }}" required>
+        </div>
+
+        <div class="formulario__boton">
+            <input type="submit" value="Actualizar">
+        </div>
+
+        <p><a class="formulario__enlace" href="{% url 'usuario_listar' %}">Volver a la lista</a></p>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rolSelect = document.getElementById('rol_id');
+        const fichaGroup = document.getElementById('grupo_ficha');
+        const fichaSelect = $('#fichas');
+
+        function toggleFichas() {
+            const selectedOption = rolSelect.options[rolSelect.selectedIndex];
+            const codigo = selectedOption.getAttribute('data-codigo');
+            if (codigo === 'INS' || codigo === 'APD') {
+                fichaGroup.style.display = 'block';
+                // Activar Select2
+                fichaSelect.select2({
+                    placeholder: "Seleccione las Fichas",
+                    allowClear: true,
+                    multiple: true,
+                    width: '100%',
+                    minimumInputLength: 2, // Solo buscar cuando se escriben al menos 2 caracteres
+                    ajax: {
+                        url: '{% url "buscar_fichas" %}',  // Ruta para buscar fichas
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                q: params.term, // Buscar por término
+                                page: params.page || 1
+                            };
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 1;
+                            return {
+                                results: data.results,
+                                pagination: {
+                                    more: data.pagination.more
+                                }
+                            };
+                        }
+                    }
+                });
+            } else {
+                fichaGroup.style.display = 'none';
+                // Reset Select2
+                fichaSelect.select2("destroy").val(null).trigger('change');
+            }
+        }
+
+        rolSelect.addEventListener('change', toggleFichas);
+        toggleFichas(); // Ejecutar al cargar
+    });
+</script>
+{% endblock %}

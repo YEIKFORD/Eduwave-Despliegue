@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Coordinador{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+
+
+{% block content %}
+    <div class="contenedor">
+        <div class="barra-superior">
+            <a class="boton-crear" href="#">
+                + Crear Novedad
+            </a>
+            <div class="barra-busqueda-2">
+                <a class="boton-crear" href="{% url 'coordinador_listar' %}">
+                    - Consultar Novedades
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
