@@ -71,10 +71,6 @@
             <!-- ------------------------------------------------------------------------------------------------------- -->
 
 
-                <p class="pagina__bienvenida" >Bienvenido, {{ user.username }} ({{ user.rol.nombre }})</p>
-                <a href="{% url 'redireccion_usuario' %}" class="pagina__enlace">Inicio</a>
-                <a href="{% url 'novedad_listar' %}" class="pagina__enlace">Novedades</a>
-                <a href="{% url 'logout_usuario' %}" class="inicio-sesion">Cerrar sesión</a>
 
             {% else %}
                 <a href="{% url 'usuario_insertar' %}" class="pagina__enlace">Registrarse</a>
