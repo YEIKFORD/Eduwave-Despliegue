@@ -19,7 +19,7 @@
 }
 
 #toggleMode {
-    position: fixed;
+    position: absolute;
     top: 7rem;
     right: 5rem;
     display: flex;
