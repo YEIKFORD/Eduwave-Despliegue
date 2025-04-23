@@ -74,7 +74,7 @@ def novedad_insertar(request):
                 novedad.save()
 
             # Actualizar estado del ambiente si es una novedad de tipo 'ambiente'
-            if tipo_novedad.nombre.lower() == 'ambiente' and ambiente and estado_ambiente in ['A', 'N']:
+            if tipo_novedad.nombre.lower() == 'Ambiente' and ambiente and estado_ambiente in ['A', 'N']:
                 ambiente.estado = estado_ambiente
                 ambiente.save()
 
