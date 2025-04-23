@@ -214,7 +214,7 @@ def redireccionar_usuario(request):
         return redirect('coordinador_listar')
     
     elif usuario.rol.codigo == 'ADE':  # Administrador de Edificios
-        return render(request, 'Administrador/administrador.html', {'usuario': usuario})
+        return render(request, 'Administrador/listar.html', {'usuario': usuario})
     
     elif usuario.rol.codigo == 'APD':  # Aprendiz
         return render(request, 'Aprendiz/aprendiz.html', {'usuario': usuario})

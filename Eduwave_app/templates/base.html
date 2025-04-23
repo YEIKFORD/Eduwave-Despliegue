@@ -25,36 +25,51 @@
         </div>
         {% block header %}
         <nav class="pagina__navegacion {% if user.is_authenticated %}con-parrafo{% endif %}"> 
-<!-- ----------Navegacion Administrador De Edificios ---------- -->
-            {% if user.rol.codigo == "ADM" %}
-                
-            {% endif %}
-<!-- ------------------------------------------------------------------------------------------------------- -->
-
-<!-- ----------Navegacion Aprendiz ---------- -->
-            {% if user.rol.codigo == "APR" %}
-            {% endif %}
-<!-- ------------------------------------------------------------------------------------------------------- -->
-
-<!-- ----------Navegacion Coordinador ---------- -->
-            {% if user.rol.codigo == "COO" %}
-                
-            {% endif %}
-<!-- ------------------------------------------------------------------------------------------------------- -->
-
-<!-- ----------Navegacion Instructor ---------- -->
-            {% if user.rol.codigo == "INS" %}
-            {% endif %}
-<!-- ------------------------------------------------------------------------------------------------------- -->
-
-<!-- ----------Navegacion Administrador del sistema ---------- -->
-            {% if user.rol.codigo == "ADS" %}
-            
-            {% endif %}
-<!-- ------------------------------------------------------------------------------------------------------- -->
-
 <!--------------Navegacion Sesion Iniciada---------------- -->
             {% if user.is_authenticated %}
+            <p class="pagina__bienvenida" >Bienvenido, {{ user.username }} ({{ user.rol.nombre }})</p>
+
+            <!-- ----------Navegacion Administrador De Edificios ---------- -->
+                {% if user.rol.codigo == "ADE" %}
+                <a href="{% url 'redireccion_usuario' %}" class="pagina__enlace">Inicio</a>
+                <a href="{% url 'novedad_listar' %}" class="pagina__enlace">Novedades</a>
+                <a href="{% url 'logout_usuario' %}" class="inicio-sesion">Cerrar sesión</a>
+                {% endif %}
+            <!-- ------------------------------------------------------------------------------------------------------- -->
+
+            <!-- ----------Navegacion Aprendiz ---------- -->
+                {% if user.rol.codigo == "APR" %}
+                <a href="{% url 'redireccion_usuario' %}" class="pagina__enlace">Inicio</a>
+                <a href="{% url 'novedad_academica_listar' %}" class="pagina__enlace">Novedades</a>
+                <a href="{% url 'logout_usuario' %}" class="inicio-sesion">Cerrar sesión</a>
+                {% endif %}
+            <!-- ------------------------------------------------------------------------------------------------------- -->
+
+            <!-- ----------Navegacion Coordinador ---------- -->
+                {% if user.rol.codigo == "COO" %}
+                <a href="{% url 'redireccion_usuario' %}" class="pagina__enlace">Inicio</a>
+                <a href="{% url 'novedad_listar' %}" class="pagina__enlace">Novedades</a>
+                <a href="{% url 'logout_usuario' %}" class="inicio-sesion">Cerrar sesión</a>
+                {% endif %}
+            <!-- ------------------------------------------------------------------------------------------------------- -->
+
+            <!-- ----------Navegacion Instructor ---------- -->
+                {% if user.rol.codigo == "INS" %}
+                <a href="{% url 'redireccion_usuario' %}" class="pagina__enlace">Inicio</a>
+                <a href="{% url 'novedad_listar' %}" class="pagina__enlace">Novedades</a>
+                <a href="{% url 'logout_usuario' %}" class="inicio-sesion">Cerrar sesión</a>
+                {% endif %}
+            <!-- ------------------------------------------------------------------------------------------------------- -->
+
+            <!-- ----------Navegacion Administrador del sistema ---------- -->
+                {% if user.rol.codigo == "ADS" %}
+                <a href="{% url 'redireccion_usuario' %}" class="pagina__enlace">Inicio</a>
+                <a href="{% url 'novedad_listar' %}" class="pagina__enlace">Novedades</a>
+                <a href="{% url 'logout_usuario' %}" class="inicio-sesion">Cerrar sesión</a>
+            
+                {% endif %}
+            <!-- ------------------------------------------------------------------------------------------------------- -->
+
 
                 <p class="pagina__bienvenida" >Bienvenido, {{ user.username }} ({{ user.rol.nombre }})</p>
                 <a href="{% url 'redireccion_usuario' %}" class="pagina__enlace">Inicio</a>

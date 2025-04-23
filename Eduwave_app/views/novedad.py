@@ -41,7 +41,7 @@ def novedad_insertar(request):
             tipo_novedad = get_object_or_404(TipoNovedad, id=tipo_novedad_id)
 
             # Verificación de permiso para este tipo de novedad
-            if (codigo_rol == 'ADM' and tipo_novedad.nombre != 'Ambiente') or \
+            if (codigo_rol == 'ADE' and tipo_novedad.nombre != 'Ambiente') or \
             (codigo_rol == 'LDB' and tipo_novedad.nombre not in ['Ambiente', 'Disciplinaria']):
                 return HttpResponseForbidden("No tienes permiso para registrar este tipo de novedad.")
 
