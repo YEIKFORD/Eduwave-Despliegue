@@ -112,6 +112,8 @@ urlpatterns = [
     path('api/usuarios/', usuario_search, name='usuario_search'),
     path('novedades/eliminar_masivo/', novedad_eliminar_masivo, name='novedad_eliminar_masivo'),
     path('novedades/academica/', novedad_academica_listar, name='novedad_academica_listar'),
+    path('novedades/disciplinaria/', novedad_disciplinaria_listar, name='novedad_disciplinaria_listar'),
+
 
 
 

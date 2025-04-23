@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Novedades Disciplinarias{% endblock %}
+
+{% block estilos %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block content %}
+<h2 class="titulo-novedades">Novedades Disciplinarias</h2>
+
+<form method="GET" class="form-filtros">
+    <label for="fecha">Filtrar por Fecha:</label>
+    <input type="date" name="fecha" id="fecha" value="{{ request.GET.fecha }}">
+
+    <label for="nombre_instructor">Filtrar por Nombre del Instructor:</label>
+    <input type="text" name="nombre_instructor" id="nombre_instructor" placeholder="Buscar por nombre..." value="{{ request.GET.nombre_instructor }}">
+
+    <button type="submit">Filtrar</button>
+</form>
+
+{% if novedades_aca %}
+    <table class="tabla-novedades">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Descripción</th>
+                <th>Tipo de Novedad</th>
+                <th>Instructor</th>
+                <th>Evidencia</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for novedad in novedades_aca %}
+                <tr>
+                    <td>{{ novedad.fecha|date:"d/m/Y H:i" }}</td>
+                    <td>{{ novedad.descripcion }}</td>
+                    <td>{{ novedad.tipo_novedad.nombre }}</td>
+                    <td>{{ novedad.creado_por.first_name }} {{ novedad.creado_por.last_name }}</td>
+                    <td>
+                        {% if novedad.evidencia %}
+                            <a href="{{ novedad.evidencia.url }}" target="_blank">Ver Evidencia</a>
+                        {% else %}
+                            No disponible
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No hay novedades disciplinarias registradas.</p>
+{% endif %}
+
+{% endblock %}

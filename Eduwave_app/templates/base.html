@@ -38,7 +38,7 @@
             <!-- ------------------------------------------------------------------------------------------------------- -->
 
             <!-- ----------Navegacion Aprendiz ---------- -->
-                {% if user.rol.codigo == "APR" %}
+                {% if user.rol.codigo == "APD" %}
                 <a href="{% url 'redireccion_usuario' %}" class="pagina__enlace">Inicio</a>
                 <a href="{% url 'novedad_academica_listar' %}" class="pagina__enlace">Novedades</a>
                 <a href="{% url 'logout_usuario' %}" class="inicio-sesion">Cerrar sesión</a>

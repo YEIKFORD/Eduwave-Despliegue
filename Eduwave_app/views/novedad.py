@@ -135,6 +135,36 @@ def novedad_academica_listar(request):
 
     return render(request, "Aprendiz/academica.html", {'novedades_aca': novedades_aca})
 
+
+@login_required
+def novedad_disciplinaria_listar(request):
+    aprendiz = request.user
+
+    fecha = request.GET.get('fecha')
+    nombre_instructor = request.GET.get('nombre_instructor')
+    tipo_novedad = request.GET.get('tipo_novedad')
+
+    novedades_aca = Novedad.objects.all()
+
+    if fecha:
+        try:
+            fecha = datetime.strptime(fecha, '%Y-%m-%d')
+            novedades_aca = novedades_aca.filter(fecha__date=fecha)
+        except ValueError:
+            pass  
+
+    if nombre_instructor:
+        novedades_aca = novedades_aca.filter(creado_por__first_name__icontains=nombre_instructor)
+
+    if tipo_novedad == 'Disciplinaria':
+        novedades_aca = novedades_aca.filter(tipo_novedad__nombre='Disciplinaria', usuarios=aprendiz)
+    
+    elif not tipo_novedad:
+        novedades_aca = novedades_aca.filter(usuarios=aprendiz)
+
+    return render(request, "Aprendiz/disciplinaria.html", {'novedades_aca': novedades_aca})
+
+
 @login_required
 def novedad_listar(request):
     usuarios = Usuario.objects.all()
