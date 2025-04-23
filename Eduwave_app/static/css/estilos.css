@@ -528,6 +528,14 @@ body {
     color: white;
     box-sizing: border-box;
 }
+@media (max-width:768px){
+    .formulario-estructura{
+        width:80%
+    }
+    .formulario-estructura__campo{
+        width:100%
+    }
+}
 
 .formulario-estructura__titulo {
     font-size: 1.7rem;
@@ -559,6 +567,7 @@ body {
     font-size: 1rem;
     background-color: transparent;
     transition: background-color 0.3s;
+    width:100%
 }
 
 .formulario-estructura__campo:focus {
